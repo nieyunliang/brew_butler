@@ -1,0 +1,3 @@
+Warning: 1 installed keg from an untrusted tap not scanned:
+  Refusing to load formula jandedobbeleer/oh-my-posh/oh-my-posh from untrusted tap jandedobbeleer/oh-my-posh.
+Run `brew trust` on the formula or tap to include it in future scans.

@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brewbutler 2.0 · Liquid Glass 原型</title>
+<!--
+  Brewbutler UI v2.0.2 原型（docs/ui-design.md），已与 UX 方案 v1.4（docs/ux-optimization-plan.md）同步。
+  浏览器无法还原 Liquid Glass 的真实折射，这里用 backdrop-filter + 高光描边表达层级与形状。
+  所有包版本、CVE、服务记录均为演示数据，不是事实基线（见 technical-notes §1）。
+  查询参数：?screen=overview|updates|library|discover|services|maintenance|detail|settings
+           &theme=dark &reduce=1 &palette=1 &select=1 &w=1024 &dock=0
+           &island=open|result|summary|sync   任务岛：展开 / 批次结果态 / 结果汇总 / 正在同步索引
+           &sheet=uninstall|reinstall &target=openssl@3 &zap=1
+           &lf=pin,manual,keg,tap:homebrew/core &menu=1   资料库附加筛选 / 打开「筛选」菜单
+           &uscope=安全 &sync=fail &dtab=依赖 &settab=homebrew &onboard=1|2|3
+-->
+<style>
+:root{
+  --accent:#0A84FF;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","Helvetica Neue",sans-serif;
+  --mono:"SF Mono",ui-monospace,Menlo,monospace;
+  --canvas:#F5F5F7; --raised:#FFFFFF; --sep:rgba(0,0,0,.09);
+  --t1:#1D1D1F; --t2:rgba(29,29,31,.68); --t3:rgba(29,29,31,.46);
+  --glass:rgba(255,255,255,.58); --glass-strong:rgba(255,255,255,.74);
+  --glass-edge:rgba(255,255,255,.75); --glass-shadow:0 10px 30px -8px rgba(0,0,0,.18),0 1px 2px rgba(0,0,0,.06);
+  --glass-hi:inset 0 1px 0 rgba(255,255,255,.9),inset 0 -1px 0 rgba(0,0,0,.05);
+  --solid:#ECECEE;
+  --green:#28A745; --orange:#F08A00; --red:#E5372E; --yellow:#E8B500; --blue:#0A84FF; --gray:#8E8E93;
+  --console:#FFFFFF;
+}
+.dark{
+  --canvas:#1C1C1E; --raised:#262628; --sep:rgba(255,255,255,.10);
+  --t1:#F5F5F7; --t2:rgba(245,245,247,.70); --t3:rgba(245,245,247,.45);
+  --glass:rgba(48,48,52,.52); --glass-strong:rgba(56,56,60,.72);
+  --glass-edge:rgba(255,255,255,.14); --glass-shadow:0 12px 34px -8px rgba(0,0,0,.6),0 1px 2px rgba(0,0,0,.4);
+  --glass-hi:inset 0 1px 0 rgba(255,255,255,.16),inset 0 -1px 0 rgba(0,0,0,.25);
+  --solid:#2C2C2E;
+  --green:#32D74B; --orange:#FF9F0A; --red:#FF453A; --yellow:#FFD60A; --blue:#0A84FF; --gray:#98989D;
+  --console:#151517;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font:13px/1.45 var(--font);color:var(--t1);overflow:hidden;
+  background:
+    radial-gradient(1200px 700px at 12% 18%, #7FB7FF 0%, transparent 60%),
+    radial-gradient(900px 700px at 88% 22%, #FFB38A 0%, transparent 60%),
+    radial-gradient(1000px 800px at 60% 100%, #B79BFF 0%, transparent 60%),
+    linear-gradient(135deg,#DCE8F7,#F3E3EE);
+  -webkit-font-smoothing:antialiased}
+body.dark{background:
+    radial-gradient(1200px 700px at 12% 18%, #1E3E78 0%, transparent 60%),
+    radial-gradient(900px 700px at 88% 22%, #6B2E3A 0%, transparent 60%),
+    radial-gradient(1000px 800px at 60% 100%, #3A2A6E 0%, transparent 60%),
+    linear-gradient(135deg,#0F1626,#1D1324)}
+button{white-space:nowrap;font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+input{font:inherit;color:inherit}
+.mono{font-family:var(--mono);font-size:12px}
+.num{font-variant-numeric:tabular-nums}
+.t2{color:var(--t2)} .t3{color:var(--t3)}
+
+/* ---------- 玻璃 ---------- */
+.glass{background:var(--glass);-webkit-backdrop-filter:blur(26px) saturate(185%);backdrop-filter:blur(26px) saturate(185%);
+  border:1px solid var(--glass-edge);box-shadow:var(--glass-hi),var(--glass-shadow)}
+.glass.strong{background:var(--glass-strong)}
+.reduce .glass{background:var(--solid)!important;-webkit-backdrop-filter:none;backdrop-filter:none;border-color:var(--sep);box-shadow:0 6px 18px -8px rgba(0,0,0,.25)}
+.reduce .hero-ext{display:none}
+
+/* ---------- 演示控制坞 ---------- */
+.dock{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:6px;align-items:center;padding:6px;border-radius:999px;z-index:100;font-size:12px}
+.dock button{padding:5px 11px;border-radius:999px}
+.dock button.on{background:var(--accent);color:#fff}
+.dock .sw{width:16px;height:16px;border-radius:50%;padding:0;border:2px solid transparent}
+.dock .sw.on{border-color:var(--t1)}
+.dock .lbl{padding:0 6px;color:var(--t2)}
+
+/* ---------- 窗口 ---------- */
+.stage{position:absolute;inset:0;display:grid;place-items:center;padding:24px 24px 64px}
+.window{position:relative;width:1280px;height:820px;border-radius:26px;overflow:hidden;background:var(--canvas);
+  box-shadow:0 50px 120px -30px rgba(0,0,0,.55),0 0 0 1px rgba(0,0,0,.12);transform-origin:center}
+.dark .window{box-shadow:0 50px 120px -30px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.1)}
+.window.narrow{width:1024px;height:768px}
+.hero-ext{position:absolute;left:0;right:0;top:0;height:250px;pointer-events:none;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 22%,transparent),transparent 92%)}
+
+/* 侧边栏：浮动玻璃 */
+.sidebar{position:absolute;left:9px;top:9px;bottom:9px;width:220px;border-radius:20px;padding:46px 10px 10px;display:flex;flex-direction:column;z-index:20}
+.lights{position:absolute;left:17px;top:18px;display:flex;gap:8px}
+.lights i{width:12px;height:12px;border-radius:50%;background:#FF5F57}
+.lights i:nth-child(2){background:#FEBC2E}.lights i:nth-child(3){background:#28C840}
+.nav{display:flex;flex-direction:column;gap:2px;margin-top:6px}
+.nav button{display:flex;align-items:center;gap:9px;padding:6px 10px;border-radius:10px;text-align:left;font-size:13px}
+.nav button:hover{background:rgba(127,127,127,.12)}
+.nav button.on{background:color-mix(in srgb,var(--accent) 20%,transparent)}
+.nav button.on .ico{color:var(--accent)}
+.nav .ico{width:18px;text-align:center;font-size:14px;color:var(--t2)}
+.nav .badge{margin-left:auto;font-size:11px;color:var(--t2);font-variant-numeric:tabular-nums}
+.nav .badge.red{background:var(--red);color:#fff;border-radius:999px;padding:0 6px;font-weight:600}
+.side-h{font-size:11px;color:var(--t3);font-weight:600;padding:12px 10px 4px}
+.brewcard{margin-top:auto;border-radius:14px;padding:10px 12px;font-size:11.5px;background:rgba(127,127,127,.10)}
+.brewcard b{font-size:12px}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:5px;vertical-align:1px}
+
+/* 工具栏 */
+.toolbar{position:absolute;left:240px;right:12px;top:10px;height:40px;display:flex;align-items:center;gap:10px;z-index:15}
+.tgroup{display:flex;align-items:center;height:36px;border-radius:999px;padding:0 4px}
+.tgroup button{height:30px;min-width:30px;padding:0 9px;border-radius:999px;display:flex;align-items:center;gap:6px;font-size:13px}
+.tgroup button:hover{background:rgba(127,127,127,.14)}
+.ttitle{font-size:15px;font-weight:600;margin-left:6px;white-space:nowrap}
+.search{flex:0 1 300px;margin-left:auto;display:flex;align-items:center;gap:7px;padding:0 12px;height:36px;border-radius:999px;color:var(--t2);position:relative}
+.search input{border:0;background:none;outline:none;flex:1;min-width:0;color:var(--t1)}
+.kbd{font-size:11px;color:var(--t3);border:1px solid var(--sep);border-radius:5px;padding:0 4px}
+.suggest{position:absolute;top:42px;left:0;right:0;border-radius:18px;padding:6px;display:none;z-index:40}
+.suggest.show{display:block}
+.suggest div{padding:7px 10px;border-radius:10px;color:var(--t1)}
+.suggest div:first-child{background:color-mix(in srgb,var(--accent) 18%,transparent)}
+
+/* 内容 */
+.content{position:absolute;left:238px;right:0;top:0;bottom:0;overflow:auto;padding:64px 28px 120px 20px;scrollbar-width:none}
+.content::-webkit-scrollbar{display:none}
+.window.has-inspector .content{right:316px}
+.window.has-inspector .toolbar{right:328px}
+.hero{display:flex;align-items:flex-end;gap:12px;margin-bottom:14px}
+.hero h1{font-size:26px;font-weight:700;letter-spacing:-.01em;line-height:1.15}
+.hero .sub{color:var(--t2);font-size:13px;margin-top:2px}
+.hero .acts{margin-left:auto;display:flex;gap:8px}
+.btn{height:30px;padding:0 14px;border-radius:999px;font-size:13px;font-weight:500;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.btn.g{background:var(--glass);-webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%);border:1px solid var(--glass-edge);box-shadow:var(--glass-hi),0 2px 8px -2px rgba(0,0,0,.12)}
+.btn.p{background:var(--accent);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 4px 14px -4px color-mix(in srgb,var(--accent) 70%,transparent)}
+.btn.danger{background:color-mix(in srgb,var(--red) 16%,var(--glass));color:var(--red);border:1px solid color-mix(in srgb,var(--red) 30%,transparent)}
+.btn.sm{height:24px;padding:0 10px;font-size:12px}
+.btn[disabled]{opacity:.4;cursor:not-allowed}
+.reduce .btn.g{background:var(--solid);backdrop-filter:none;-webkit-backdrop-filter:none}
+
+.card{background:var(--raised);border-radius:18px;padding:16px;box-shadow:0 0 0 1px var(--sep)}
+.card h3{font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.card h3 .r{margin-left:auto;font-size:12px;font-weight:400;color:var(--t2);display:flex;gap:8px;align-items:center}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.narrow .grid2{grid-template-columns:1fr}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.metric{display:flex;gap:12px;align-items:center;padding:14px;cursor:pointer}
+.metric:hover{box-shadow:0 0 0 1px var(--sep),0 6px 18px -10px rgba(0,0,0,.3)}
+.ring{width:52px;height:52px;flex:none}
+.metric .v{font:600 24px/1.1 ui-rounded,var(--font);font-variant-numeric:tabular-nums}
+.metric .l{font-size:12px;color:var(--t2)}
+
+.badge{display:inline-flex;align-items:center;gap:4px;height:19px;padding:0 7px;border-radius:999px;font-size:11px;font-weight:500;white-space:nowrap;vertical-align:1px}
+.b-red{background:color-mix(in srgb,var(--red) 15%,transparent)} .b-red i{color:var(--red)}
+.b-orange{background:color-mix(in srgb,var(--orange) 15%,transparent)} .b-orange i{color:var(--orange)}
+.b-yellow{background:color-mix(in srgb,var(--yellow) 22%,transparent)} .b-yellow i{color:#B88A00}
+.dark .b-yellow i{color:var(--yellow)}
+.b-gray{background:color-mix(in srgb,var(--gray) 18%,transparent)} .b-gray i{color:var(--gray)}
+.b-green{background:color-mix(in srgb,var(--green) 15%,transparent)} .b-green i{color:var(--green)}
+.b-blue{background:color-mix(in srgb,var(--blue) 14%,transparent)} .b-blue i{color:var(--blue)}
+.b-accent{background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--accent)}
+.badge i{font-style:normal;font-size:10px}
+
+/* scope 栏 */
+.scope{display:inline-flex;gap:2px;padding:3px;border-radius:999px;margin-bottom:12px;position:relative}
+.scope button{height:28px;padding:0 13px;border-radius:999px;font-size:12.5px;display:flex;gap:6px;align-items:center;position:relative;z-index:1}
+.scope button .c{color:var(--t3);font-variant-numeric:tabular-nums}
+.scope button.on{color:#fff}
+.scope button.on .c{color:rgba(255,255,255,.8)}
+.scope .pill{position:absolute;top:3px;height:28px;border-radius:999px;background:var(--accent);transition:all .35s cubic-bezier(.3,1.3,.5,1);box-shadow:inset 0 1px 0 rgba(255,255,255,.3)}
+.motion-off .scope .pill{transition:none}
+.scopeRow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.scopeRow .r{margin-left:auto;margin-bottom:12px;color:var(--t2);font-size:12px}
+
+/* 列表 */
+.list{background:var(--raised);border-radius:18px;box-shadow:0 0 0 1px var(--sep);overflow:hidden;margin-bottom:14px}
+.ghead{display:flex;align-items:center;gap:8px;padding:9px 16px;font-size:12px;font-weight:600;color:var(--t2);background:color-mix(in srgb,var(--t1) 3%,transparent);border-bottom:1px solid var(--sep)}
+.ghead .r{margin-left:auto;font-weight:400;display:flex;gap:8px;align-items:center}
+.row{display:grid;align-items:center;gap:12px;padding:9px 16px;border-bottom:1px solid var(--sep);cursor:default}
+.row:last-child{border-bottom:0}
+.row:hover{background:color-mix(in srgb,var(--t1) 3.5%,transparent)}
+.row.sel{background:color-mix(in srgb,var(--accent) 12%,transparent)}
+.row .nm{font-weight:600;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.row .ds{font-size:12px;color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.u-row{grid-template-columns:20px minmax(0,1fr) 170px 120px}
+.l-row{grid-template-columns:20px minmax(0,1.6fr) 74px 90px 90px 76px 70px}
+.narrow .l-row{grid-template-columns:20px minmax(0,1.6fr) 74px 90px 90px}
+.narrow .l-row .hide-n{display:none}
+.l-head{font-size:11.5px;font-weight:600;color:var(--t3);padding:8px 16px;border-bottom:1px solid var(--sep)}
+.cb{width:16px;height:16px;border-radius:5px;border:1.5px solid color-mix(in srgb,var(--t1) 30%,transparent);display:grid;place-items:center;cursor:pointer;font-size:11px;color:#fff}
+.cb.on{background:var(--accent);border-color:var(--accent)}
+.cb.dis{opacity:.35;cursor:not-allowed}
+.st{width:16px;height:16px;display:grid;place-items:center;font-size:13px}
+.ver{font-family:var(--mono);font-size:12px;white-space:nowrap}
+.ver b{color:var(--accent);font-weight:700}
+.ver .old{color:var(--t3)}
+.spin{display:inline-block;width:13px;height:13px;border-radius:50%;border:2px solid color-mix(in srgb,var(--accent) 25%,transparent);border-top-color:var(--accent);animation:sp 1s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.motion-off .spin{animation:none}
+.indet{height:4px;border-radius:4px;background:color-mix(in srgb,var(--accent) 18%,transparent);overflow:hidden;position:relative;width:120px;margin-top:4px}
+.indet::after{content:"";position:absolute;inset:0;width:40%;background:var(--accent);border-radius:4px;animation:ind 1.4s ease-in-out infinite}
+@keyframes ind{0%{left:-40%}100%{left:100%}}
+.motion-off .indet::after{animation:none;left:30%}
+.err{grid-column:2/-1;font-size:12px;color:var(--red);font-family:var(--mono);margin-top:-2px}
+
+/* 浮动栏 & 任务岛 */
+.floatzone{position:absolute;left:238px;right:0;bottom:16px;display:flex;flex-direction:column;align-items:center;gap:10px;z-index:30;pointer-events:none}
+.window.has-inspector .floatzone{right:316px}
+.floatzone>*{pointer-events:auto}
+.fbar{display:flex;align-items:center;gap:8px;height:46px;padding:0 8px 0 16px;border-radius:999px;animation:pop .35s cubic-bezier(.3,1.3,.5,1)}
+@keyframes pop{from{transform:translateY(16px) scale(.92);opacity:0}}
+.motion-off .fbar,.motion-off .island{animation:none!important}
+.islandRow{display:flex;align-items:center;gap:8px}
+.island{display:flex;align-items:center;gap:10px;height:46px;padding:0 8px 0 14px;border-radius:999px;cursor:pointer;min-width:360px;transition:all .4s cubic-bezier(.3,1.2,.5,1)}
+.island .ttl{font-weight:600}
+.island .ib{width:30px;height:30px;border-radius:50%;display:grid;place-items:center}
+.island .ib:hover{background:rgba(127,127,127,.15)}
+.toast{height:36px;padding:0 14px;border-radius:999px;display:flex;align-items:center;gap:7px;font-size:12.5px;animation:pop .35s cubic-bezier(.3,1.3,.5,1)}
+.panel{width:min(760px,calc(100% - 56px));height:380px;border-radius:26px;display:flex;flex-direction:column;overflow:hidden;animation:grow .42s cubic-bezier(.3,1.15,.5,1)}
+@keyframes grow{from{transform:scale(.6,.15) translateY(140px);opacity:.3;border-radius:999px}}
+.motion-off .panel{animation:none}
+.panel .ph{display:flex;align-items:center;gap:10px;padding:14px 14px 8px 18px}
+.panel .ph .ttl{font-size:15px;font-weight:600}
+.prog{height:6px;border-radius:6px;background:color-mix(in srgb,var(--t1) 10%,transparent);margin:0 18px;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--accent);border-radius:6px}
+.panel .tabs{margin:10px 18px 6px}
+.panel .pb{flex:1;overflow:auto;margin:0 10px 10px;border-radius:16px}
+.prow{display:grid;grid-template-columns:20px 110px 1fr auto;gap:10px;align-items:center;padding:8px 10px;border-radius:10px}
+.prow:hover{background:rgba(127,127,127,.1)}
+.console{background:var(--console);height:100%;border-radius:14px;padding:12px 14px;font:12px/1.65 var(--mono);color:var(--t1);overflow:auto;box-shadow:0 0 0 1px var(--sep)}
+.console .m{color:var(--t3)} .console .ok{color:var(--green)} .console .e{color:var(--red)} .console .h{color:var(--accent);font-weight:600}
+
+/* 检查器 */
+.inspector{position:absolute;right:9px;top:9px;bottom:9px;width:300px;border-radius:20px;padding:56px 0 12px;overflow:auto;z-index:18;scrollbar-width:none}
+.isec{padding:4px 16px 12px}
+.isec h4{font-size:11px;font-weight:600;color:var(--t3);margin:6px 0 6px}
+.igroup{background:rgba(127,127,127,.09);border-radius:12px;padding:2px 12px}
+.reduce .igroup{background:var(--raised)}
+.kv{display:flex;justify-content:space-between;gap:8px;padding:7px 0;border-bottom:1px solid var(--sep);font-size:12.5px}
+.kv:last-child{border-bottom:0}
+.kv span:first-child{color:var(--t2)}
+.ibtn{display:flex;align-items:center;gap:8px;width:100%;padding:8px 0;border-bottom:1px solid var(--sep);font-size:12.5px;text-align:left}
+.ibtn:last-child{border-bottom:0}
+.ibtn.red{color:var(--red)}
+
+/* 详情 */
+.dhead{display:flex;gap:14px;align-items:flex-start;margin-bottom:16px}
+.dicon{width:56px;height:56px;border-radius:15px;display:grid;place-items:center;font-size:26px;background:linear-gradient(160deg,color-mix(in srgb,var(--accent) 70%,#fff),var(--accent));color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 6px 16px -6px var(--accent)}
+.dhead h1{font-size:22px;font-weight:600}
+.notice{display:flex;gap:10px;align-items:center;padding:10px 14px;border-radius:16px;margin-bottom:14px}
+.notice.red{background:color-mix(in srgb,var(--red) 10%,var(--glass))}
+.notice.blue{background:color-mix(in srgb,var(--blue) 10%,var(--glass))}
+.notice.orange{background:color-mix(in srgb,var(--orange) 12%,var(--glass))}
+.notice .r{margin-left:auto}
+.meta{display:grid;grid-template-columns:1fr 1fr;gap:0 24px}
+.meta .kv{font-size:13px}
+.codebox{font:12px/1.6 var(--mono);background:color-mix(in srgb,var(--t1) 5%,transparent);border-radius:10px;padding:8px 12px;display:flex;align-items:center;gap:8px}
+
+/* 严重度条 */
+.sevbar{display:flex;height:10px;border-radius:6px;overflow:hidden;gap:2px;margin:6px 0 10px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.chip{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border-radius:999px;background:color-mix(in srgb,var(--t1) 6%,transparent);font-size:12px;cursor:pointer}
+.chip:hover{background:color-mix(in srgb,var(--t1) 10%,transparent)}
+details.why{font-size:12px;color:var(--t2)}
+details.why summary{cursor:pointer;color:var(--accent)}
+.miniRow{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--sep);font-size:12.5px}
+.miniRow:last-child{border-bottom:0}
+.miniRow .r{margin-left:auto;color:var(--t3);font-size:12px}
+
+/* 服务 */
+.s-row{grid-template-columns:96px minmax(0,1fr) auto}
+.pill{display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 9px;border-radius:999px;font-size:12px;font-weight:500}
+
+/* 遮罩 / 弹层 / 面板 */
+.scrim{position:absolute;inset:0;background:rgba(0,0,0,.14);z-index:50;display:grid;place-items:start center}
+.dark .scrim{background:rgba(0,0,0,.35)}
+.palette{margin-top:120px;width:640px;border-radius:24px;overflow:hidden;animation:pop .3s cubic-bezier(.3,1.2,.5,1)}
+.palette .pi{display:flex;align-items:center;gap:10px;height:52px;padding:0 18px;font-size:16px;border-bottom:1px solid var(--sep)}
+.palette .pi input{flex:1;border:0;background:none;outline:none;font-size:16px}
+.pgroup{padding:6px 8px}
+.pgroup h5{font-size:11px;color:var(--t3);font-weight:600;padding:6px 10px 4px}
+.pitem{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:12px}
+.pitem.on{background:var(--accent);color:#fff}
+.pitem.on .t3,.pitem.on .kbd{color:rgba(255,255,255,.8);border-color:rgba(255,255,255,.4)}
+.pitem .kbd{margin-left:auto}
+.pfoot{display:flex;gap:16px;padding:9px 18px;border-top:1px solid var(--sep);font-size:11.5px;color:var(--t3)}
+.sheet{margin-top:90px;width:440px;border-radius:26px;padding:22px;animation:pop .3s cubic-bezier(.3,1.2,.5,1)}
+.sheet .sic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:22px;background:color-mix(in srgb,var(--red) 14%,transparent);color:var(--red);margin-bottom:12px}
+.sheet h2{font-size:17px;font-weight:600;margin-bottom:6px}
+.sheet p{color:var(--t2);margin-bottom:10px}
+.sheet .opt{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:12px;background:color-mix(in srgb,var(--t1) 5%,transparent);margin-bottom:10px}
+.toggle{width:34px;height:20px;border-radius:999px;background:color-mix(in srgb,var(--t1) 18%,transparent);position:relative;cursor:pointer;transition:.2s}
+.toggle::after{content:"";position:absolute;left:2px;top:2px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:.2s}
+.toggle.on{background:var(--green)}
+.toggle.on::after{left:16px}
+.field{width:100%;height:32px;border-radius:10px;border:1px solid var(--sep);background:var(--raised);padding:0 10px;font-family:var(--mono);outline:none}
+.field:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 30%,transparent)}
+.sheet .acts{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+.focusring{box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 45%,transparent)!important}
+
+/* 设置窗口 */
+.settings{margin-top:70px;width:640px;height:560px;border-radius:24px;overflow:hidden;background:var(--canvas);box-shadow:0 40px 100px -30px rgba(0,0,0,.6),0 0 0 1px var(--sep);display:flex;flex-direction:column}
+.settings .stb{display:flex;flex-direction:column;align-items:center;padding:12px 0 10px;position:relative}
+.settings .stabs{display:flex;gap:2px;padding:3px;border-radius:999px;margin-top:6px}
+.settings .stabs button{padding:5px 12px;border-radius:999px;font-size:12.5px;display:flex;flex-direction:column;align-items:center;gap:1px}
+.settings .stabs button.on{background:color-mix(in srgb,var(--accent) 20%,transparent);color:var(--accent)}
+.settings .sbody{padding:4px 24px 24px;overflow:auto}
+.fgroup{background:var(--raised);border-radius:14px;box-shadow:0 0 0 1px var(--sep);padding:0 14px;margin-bottom:14px}
+.frow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--sep)}
+.frow:last-child{border-bottom:0}
+.frow .d{font-size:11.5px;color:var(--t3)}
+.seg{display:inline-flex;padding:2px;border-radius:999px;background:color-mix(in srgb,var(--t1) 7%,transparent)}
+.seg span{padding:3px 11px;border-radius:999px;font-size:12px}
+.seg span.on{background:var(--raised);box-shadow:0 1px 3px rgba(0,0,0,.15)}
+
+/* 资料库「筛选」菜单与 token 行（UX O-06） */
+.fbtn{height:34px;margin-bottom:12px;position:relative}
+.fbtn.act{color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--glass))}
+.fmenu{position:absolute;top:40px;left:0;width:240px;border-radius:16px;padding:6px;z-index:45;font-size:13px}
+.fmenu .mi{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:9px;cursor:pointer}
+.fmenu .mi:hover{background:color-mix(in srgb,var(--accent) 16%,transparent)}
+.fmenu .mi .ck{width:14px;color:var(--accent);font-weight:700}
+.fmenu .mi .c{margin-left:auto;color:var(--t3);font-variant-numeric:tabular-nums}
+.fmenu .sepl{height:1px;background:var(--sep);margin:5px 8px}
+.fmenu .mh{font-size:11px;color:var(--t3);font-weight:600;padding:4px 10px 2px}
+.tokens{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:-4px 0 12px}
+.token{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 4px 0 10px;border-radius:999px;font-size:12px;background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--accent)}
+.token button{width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font-size:10px;color:var(--accent)}
+.token button:hover{background:color-mix(in srgb,var(--accent) 22%,transparent)}
+.linkbtn{color:var(--accent);font-size:12px;cursor:pointer}
+.sumgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:2px 8px 10px}
+.sumgrid div{background:color-mix(in srgb,var(--t1) 5%,transparent);border-radius:12px;padding:8px 12px}
+.sumgrid b{font:600 20px/1.2 ui-rounded,var(--font);font-variant-numeric:tabular-nums;display:block}
+.island.res{min-width:0}
+.island.res.fail .ttl{color:var(--t1)}
+details.ok{margin-top:4px}
+details.ok>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;padding:10px 4px;color:var(--t2);font-size:13px}
+details.ok>summary::-webkit-details-marker{display:none}
+.sech{font-size:12px;font-weight:600;color:var(--t2);margin:2px 4px 8px;display:flex;align-items:center;gap:6px}
+.onb{margin-top:60px;width:620px;border-radius:26px;padding:28px 30px 20px;animation:pop .3s cubic-bezier(.3,1.2,.5,1)}
+.onb h2{font-size:20px;font-weight:700;margin-bottom:6px}
+.onb .lead{color:var(--t2);margin-bottom:16px}
+.onb .cand{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:color-mix(in srgb,var(--t1) 5%,transparent);margin-bottom:8px}
+.onb .cand.on{background:color-mix(in srgb,var(--accent) 14%,transparent);box-shadow:0 0 0 1.5px var(--accent)}
+.onb .radio{width:16px;height:16px;border-radius:50%;border:1.5px solid color-mix(in srgb,var(--t1) 35%,transparent)}
+.onb .cand.on .radio{border:5px solid var(--accent)}
+.onb .pr{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--sep)}
+.onb .pr:last-child{border-bottom:0}
+.onb .foot{display:flex;align-items:center;gap:8px;margin-top:20px}
+.onb .dots{display:flex;gap:6px;margin-right:auto}
+.onb .dots i{width:7px;height:7px;border-radius:50%;background:color-mix(in srgb,var(--t1) 20%,transparent)}
+.onb .dots i.on{background:var(--accent)}
+.chk{width:16px;height:16px;border-radius:5px;border:1.5px solid color-mix(in srgb,var(--t1) 30%,transparent);display:inline-grid;place-items:center;flex:none;font-size:11px;color:#fff;cursor:pointer}
+.chk.on{background:var(--accent);border-color:var(--accent)}
+
+.empty{text-align:center;padding:40px 0;color:var(--t2)}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<div class="stage"><div class="window" id="win">
+  <div class="hero-ext"></div>
+  <aside class="sidebar glass" aria-label="侧边栏">
+    <div class="lights"><i></i><i></i><i></i></div>
+    <nav class="nav" id="nav"></nav>
+    <div class="brewcard">
+      <div><span class="dot"></span><b>Homebrew 7.0.10</b></div>
+      <div class="t2 mono" style="font-size:11px;margin-top:2px">/opt/homebrew</div>
+      <div class="t3" style="margin-top:2px" id="syncAge">上游同步于 8 分钟前</div>
+    </div>
+  </aside>
+  <header class="toolbar" id="toolbar"></header>
+  <main class="content" id="content"></main>
+  <aside class="inspector glass hidden" id="inspector" aria-label="包详情检查器"></aside>
+  <div class="floatzone" id="floatzone"></div>
+  <div id="overlay"></div>
+</div></div>
+
+<div class="dock glass" id="dock"></div>
+
+<script>
+/* ============ 演示数据（不是事实基线） ============ */
+const SEC = [
+  {n:'openssl@3',sev:'critical',cve:'CVE-2025-9230',cvss:'9.8',from:'3.6.0',to:'3.6.1',fix:true,desc:'TLS/SSL 加密工具包'},
+  {n:'node',sev:'high',cve:'CVE-2025-27210',cvss:'7.5',from:'24.9.0',to:'24.9.1',fix:true,desc:'JavaScript 运行时'},
+  {n:'git',sev:'high',cve:'CVE-2025-48384',cvss:'8.0',from:'2.51.0',to:'2.51.1',fix:true,desc:'分布式版本控制'},
+  {n:'python@3.13',sev:'medium',cve:'CVE-2025-8194',cvss:'5.3',from:'3.13.7',to:'3.13.8',fix:true,desc:'Python 解释器'},
+  {n:'libtiff',sev:'low',cve:'CVE-2025-8176',cvss:'3.3',from:'4.7.0',to:null,fix:false,desc:'TIFF 图像库'},
+];
+const REG = [
+  {n:'ffmpeg',from:'7.1',to:'7.1.1',state:'running',phase:'正在下载…',desc:'音视频处理工具'},
+  {n:'librsvg',from:'2.63.3',to:'2.63.4',state:'done',time:'14s',desc:'SVG 渲染库'},
+  {n:'aom',from:'3.12.1',to:'3.12.2',state:'failed',err:'Error: Failed to download resource "aom--3.12.2" (exit 1)',desc:'AV1 编解码器'},
+  {n:'jq',from:'1.7.1',to:'1.8.1',state:'queued',desc:'命令行 JSON 处理器'},
+  {n:'wget',from:'1.25.0',to:'1.25.1',desc:'网络下载工具'},
+  {n:'sqlite',from:'3.50.3',to:'3.50.4',desc:'嵌入式数据库'},
+  {n:'docker',from:'28.4.0',to:'28.5.0',pinned:true,desc:'容器 CLI'},
+  {n:'visual-studio-code',from:'1.104.0',to:'1.105.1',cask:true,desc:'代码编辑器'},
+];
+// [名称, 类型, 已安装, 最新, 体积, 安装时间, 标记, tap]；标记：pin 已锁定 · manual 手动安装 · keg keg-only · vuln-* 有已知漏洞
+const LIB = [
+  ['aom','formula','3.12.1','3.12.2','10.4 MB','3月14日','','homebrew/core'],
+  ['bat','formula','0.25.0','','6.1 MB','5月2日','manual','homebrew/core'],
+  ['bun','formula','1.2.21','','58 MB','9月3日','manual','oven-sh/bun'],
+  ['docker','formula','28.4.0','28.5.0','84 MB','7月2日','pin manual','homebrew/core'],
+  ['ffmpeg','formula','7.1','7.1.1','52 MB','1月9日','manual','homebrew/core'],
+  ['git','formula','2.51.0','2.51.1','61 MB','2月2日','vuln-high manual','homebrew/core'],
+  ['jq','formula','1.7.1','1.8.1','1.1 MB','4月21日','manual','homebrew/core'],
+  ['node','formula','24.9.0','24.9.1','82 MB','2月2日','vuln-high manual','homebrew/core'],
+  ['openssl@3','formula','3.6.0','3.6.1','34 MB','3月14日','vuln-critical keg','homebrew/core'],
+  ['postgresql@17','formula','17.6','','68 MB','6月5日','manual keg','homebrew/core'],
+  ['python@3.13','formula','3.13.7','3.13.8','98 MB','2月2日','vuln-medium','homebrew/core'],
+  ['redis','formula','8.2.1','','12 MB','6月5日','manual','homebrew/core'],
+  ['ripgrep','formula','14.1.1','','6.4 MB','5月2日','manual','homebrew/core'],
+  ['visual-studio-code','cask','1.104.0','1.105.1','612 MB','8月1日','manual','homebrew/cask'],
+  ['wget','formula','1.25.0','1.25.1','4.2 MB','4月21日','pin manual','homebrew/core'],
+];
+const LF_LABEL = {pin:'已锁定',manual:'手动安装',keg:'keg-only'};
+const TAPS = [['homebrew/core',48],['homebrew/cask',7],['oven-sh/bun',1],['hashicorp/tap',3]];
+const SVC = [
+  {n:'postgresql@17',st:'run',user:'yunliang',file:'~/Library/LaunchAgents/homebrew.mxcl.postgresql@17.plist'},
+  {n:'redis',st:'run',user:'yunliang',file:'~/Library/LaunchAgents/homebrew.mxcl.redis.plist'},
+  {n:'nginx',st:'err',user:'yunliang',file:'~/Library/LaunchAgents/homebrew.mxcl.nginx.plist',code:1},
+  {n:'mysql',st:'stop',user:'',file:'~/Library/LaunchAgents/homebrew.mxcl.mysql.plist'},
+];
+const SEVMAP = {critical:['严重','b-red','⛔'],high:['高危','b-orange','▲'],medium:['中危','b-yellow','●'],low:['低危','b-gray','ⓘ']};
+const NAV = [
+  ['overview','概览','▦',''],
+  ['updates','更新','⬇','36'],
+  ['library','资料库','▤','59'],
+  ['services','服务','⚙','3/4'],
+  ['maintenance','维护','✦','2'],
+];
+
+/* ============ 状态 ============ */
+const q = new URLSearchParams(location.search);
+const S = {
+  screen: q.get('screen')||'overview', theme: q.get('theme')||'light', reduce: q.get('reduce')==='1',
+  motion: true, palette: q.get('palette')==='1',
+  // 任务岛（UX O-02）：run=运行折叠（默认）· open=用户展开 · result=批次结果态 · summary=点开结果后的汇总 · sync=正在同步索引（O-01）
+  // 任务开始时永远不会自动进入 open，只有用户点击 / ⌥⌘L / 「日志」才展开。
+  isl: ({open:'open',result:'result',summary:'summary',sync:'sync'})[q.get('island')]||'run',
+  sheet: q.get('sheet')||'', sel: new Set(q.get('select')==='1'?['wget','sqlite','visual-studio-code']:[]),
+  target: q.get('target')||(q.get('sheet')==='reinstall'?'openssl@3':'visual-studio-code'), dock: q.get('dock')!=='0',
+  libSel: new Set(), uScope:q.get('uscope')||'全部', lScope:'全部', prev:'library', zap:q.get('zap')==='1', zapText:q.get('zap')==='1'?'visual-studio':'', toast:true,
+  lf: new Set((q.get('lf')||'').split(',').filter(Boolean)), fmenu: q.get('menu')==='1', syncFail: q.get('sync')==='fail',
+  dTab:q.get('dtab')||'概览', iTab:q.get('island')==='summary'?'汇总':'进度', accent: q.get('accent')||'#0A84FF', narrow: q.get('w')==='1024', query:'', palIdx:0,
+  setTab: q.get('settab')||'通用', onboard: +(q.get('onboard')||0), onbScan:false,
+};
+if (S.screen==='settings'){ S.settings=true; S.screen='overview'; }
+const islOpen = () => S.isl==='open'||S.isl==='summary';
+
+/* ============ 工具 ============ */
+const $ = s => document.querySelector(s);
+const sev = s => { const [l,c,i]=SEVMAP[s]; return `<span class="badge ${c}"><i>${i}</i>${l}</span>`; };
+const bdg = (t,c,i='') => `<span class="badge ${c}">${i?`<i>${i}</i>`:''}${t}</span>`;
+const ring = (pct,color) => { const r=22,c=2*Math.PI*r; return `<svg class="ring" viewBox="0 0 52 52"><circle cx="26" cy="26" r="${r}" fill="none" stroke="color-mix(in srgb,${color} 18%,transparent)" stroke-width="6"/><circle cx="26" cy="26" r="${r}" fill="none" stroke="${color}" stroke-width="6" stroke-linecap="round" stroke-dasharray="${c*pct} ${c}" transform="rotate(-90 26 26)"/></svg>`; };
+const scope = (items, cur, key) => `<div class="scope glass" data-scope="${key}">${items.map(([t,c])=>`<button class="${t===cur?'on':''}" data-v="${t}">${t}${c!==undefined?` <span class="c">${c}</span>`:''}</button>`).join('')}<span class="pill"></span></div>`;
+function placePills(){ document.querySelectorAll('.scope').forEach(sc=>{ const on=sc.querySelector('button.on'), p=sc.querySelector('.pill'); if(on&&p){p.style.left=on.offsetLeft+'px';p.style.width=on.offsetWidth+'px';} }); }
+
+/* ============ 页面 ============ */
+// UX O-07：扫描后已安装快照变了（这里：librsvg 2 分钟前已更新）→ warning，只给入口，不自动扫描
+const staleNotice = () => `<div class="notice orange" style="margin:0 0 10px;padding:8px 12px"><span style="color:var(--orange)">▲</span><span>已安装的包有变化，扫描结果可能已过时。用右上角「重新扫描」确认。</span></div>`;
+// UX O-01：同步上游失败时仍显示本机检查结果
+const syncFailNotice = () => S.syncFail ? `<div class="notice orange glass"><span style="color:var(--orange)">▲</span>未能同步上游，结果基于 2 小时前的本地索引。<button class="btn g sm r" data-check>重试</button></div>` : '';
+function overview(){
+  return `
+  <div class="hero"><div><h1>概览</h1><div class="sub">11月7日 周六 · 上游同步于 8 分钟前 · 本机检查于 2 分钟前</div></div>
+    <div class="acts"><button class="btn g" data-check>↻ 检查更新</button><button class="btn p" data-go="updates">全部更新 36</button></div></div>
+  <div class="metrics">
+    <div class="card metric" data-go="updates">${ring(36/59,'var(--accent)')}<div><div class="v">36</div><div class="l">可更新 · 5 个安全更新</div></div></div>
+    <div class="card metric" data-go="updates">${ring(6/36,'var(--red)')}<div><div class="v">6</div><div class="l">有已知漏洞的包</div></div></div>
+    <div class="card metric" data-go="maintenance">${ring(.62,'var(--orange)')}<div><div class="v">1.3<small style="font-size:14px"> GB</small></div><div class="l">占用 · 485 MB 可回收</div></div></div>
+    <div class="card metric" data-go="services">${ring(.75,'var(--green)')}<div><div class="v">3<small style="font-size:14px">/4</small></div><div class="l">服务运行中 · 1 异常</div></div></div>
+  </div>
+  <div class="card" style="margin-bottom:14px">
+    <h3>⛨ 安全 <span class="r">${bdg('部分覆盖','b-orange','◐')} <span class="num">覆盖 36/59</span> · 本次扫描 18 分钟前 <button class="btn g sm">重新扫描</button></span></h3>
+    ${staleNotice()}
+    <div style="display:flex;gap:14px;align-items:center;font-size:12.5px">
+      <span class="num"><b>6</b> 个受影响包 · 严重 1 · 高危 2 · 中危 2 · 低危 1</span>
+      <span class="t2" style="margin-left:auto">已有修复 5 · 上游暂无修复版本 1</span>
+    </div>
+    <div class="sevbar"><i style="flex:1;background:var(--red)"></i><i style="flex:2;background:var(--orange)"></i><i style="flex:2;background:var(--yellow)"></i><i style="flex:1;background:var(--gray)"></i></div>
+    <div class="chips">${SEC.map(s=>`<span class="chip" data-detail="${s.n}">${s.n} ${sev(s.sev)}</span>`).join('')}<span class="chip">ffmpeg ${sev('medium')}</span></div>
+    <details class="why"><summary>为什么是部分覆盖？</summary><div style="margin-top:6px">brew vulns 本次检查了 36/59 个包：7 个 cask 无 OSV 映射 · 11 个来自第三方 tap · 5 个缺少版本元数据。发现漏洞时 brew vulns 退出码为 1，属预期，不是扫描失败。</div></details>
+  </div>
+  <div class="grid2">
+    <div class="card"><h3>最近任务 <span class="r"><a style="color:var(--accent);cursor:pointer" data-island>全部</a></span></h3>
+      <div class="miniRow"><span style="color:var(--green)">✓</span>更新 librsvg<span class="r">2 分钟前 · 14s</span></div>
+      <div class="miniRow"><span style="color:var(--red)">✕</span>更新 aom <span class="badge b-red">退出码 1</span><span class="r">3 分钟前</span></div>
+      <div class="miniRow"><span style="color:var(--green)">✓</span>安全扫描 brew vulns<span class="r">18 分钟前 · 31.4s</span></div>
+      <div class="miniRow"><span style="color:var(--green)">✓</span>检查更新<span class="r">8 分钟前 · 4.2s</span></div>
+    </div>
+    <div class="card"><h3>健康</h3>
+      <div class="miniRow" data-go="maintenance" style="cursor:pointer"><span style="color:var(--orange)">▲</span>brew doctor 2 条提示<span class="r">›</span></div>
+      <div class="miniRow"><span style="color:var(--green)">✓</span>brew missing 未发现缺失依赖<span class="r"></span></div>
+      <div class="miniRow" data-go="maintenance" style="cursor:pointer"><span class="t2">◇</span>可回收 485 MB 缓存与旧版本<span class="r">›</span></div>
+      <div class="miniRow" data-go="maintenance" style="cursor:pointer"><span class="t2">◇</span>3 个孤立依赖<span class="r">›</span></div>
+    </div>
+  </div>`;
+}
+
+function uRow(p, secRow){
+  const st = p.state;
+  let lead;
+  if(st==='running') lead=`<span class="st"><span class="spin"></span></span>`;
+  else if(st==='done') lead=`<span class="st" style="color:var(--green)">✓</span>`;
+  else if(st==='failed') lead=`<span class="st" style="color:var(--red)">✕</span>`;
+  else if(st==='queued') lead=`<span class="st t3">◷</span>`;
+  else lead=`<span class="cb ${S.sel.has(p.n)?'on':''} ${p.pinned||(!p.fix&&secRow)?'dis':''}" data-sel="${p.n}" title="${p.pinned?'已锁定的包不会被更新，可在详情中解锁':''}">${S.sel.has(p.n)?'✓':''}</span>`;
+  const badges = (p.pinned?bdg('已锁定','b-gray','⌖'):'') + (p.cask?bdg('cask','b-blue'):'');
+  const mid = secRow
+    ? `<div class="ds">${sev(p.sev)} <span class="mono">${p.cve}</span> · CVSS ${p.cvss} · ${p.fix?`修复于 <span class="mono">${p.to}</span>`:'<span style="color:var(--orange)">上游暂无修复版本</span>'}</div>`
+    : st==='running' ? `<div class="ds">${p.phase}</div><div class="indet"></div>`
+    : st==='done' ? `<div class="ds" style="color:var(--green)">完成 · ${p.time}</div>`
+    : st==='queued' ? `<div class="ds">排队中 · 第 1 位</div>`
+    : `<div class="ds">${p.desc}</div>`;
+  const ver = p.to ? `<span class="ver"><span class="old">${p.from}</span> → <b>${p.to}</b></span>` : `<span class="ver old">${p.from}</span>`;
+  const act = st ? (st==='failed'?`<span style="display:flex;gap:6px;justify-content:flex-end"><button class="btn g sm" data-island>日志</button><button class="btn g sm">重试…</button></span>`:'<span></span>')
+            : (p.pinned||(secRow&&!p.fix)) ? '<span></span>' : `<span style="text-align:right"><button class="btn g sm">更新</button></span>`;
+  return `<div class="row u-row ${S.sel.has(p.n)?'sel':''}" data-detail="${p.n}">${lead}<div><div class="nm">${p.n} ${badges}</div>${mid}</div>${ver}${act}${st==='failed'?`<div class="err">${p.err}</div>`:''}</div>`;
+}
+function updates(){
+  // UX O-04：页头只有一个主按钮，文案随 scope 变化；有选中时让位给浮动操作栏
+  const main = {'全部':'全部更新 36','安全':'更新 5 个安全项','formula':'更新 32 个 formula','cask':'更新 4 个 cask'}[S.uScope];
+  const yield_ = S.sel.size>0;
+  const showSec = S.uScope==='全部'||S.uScope==='安全', showReg = S.uScope!=='安全';
+  const reg = S.uScope==='cask'?REG.filter(p=>p.cask):S.uScope==='formula'?REG.filter(p=>!p.cask):REG;
+  return `
+  <div class="hero"><div><h1>更新</h1><div class="sub">36 个可用更新 · 5 个安全更新 · 上游同步于 ${S.syncFail?'2 小时前':'8 分钟前'} · 本机检查于 2 分钟前</div></div>
+    <div class="acts"><button class="btn g">预览</button><button class="btn ${yield_?'g':'p'}" ${yield_?'title="已有选中项：请使用底部操作栏「更新所选」"':''}>${main}</button></div></div>
+  ${syncFailNotice()}
+  <div class="scopeRow">${scope([['全部',36],['安全',5],['formula',32],['cask',4]],S.uScope,'u')}<span class="r">预计下载 1.8 GB</span></div>
+  ${showSec?`<div class="list">
+    <div class="ghead">⛨ 安全更新 <span class="num">5</span><span class="r">${bdg('部分覆盖','b-orange','◐')}<span class="num">覆盖 36/59 · 本次扫描 18 分钟前</span></span></div>
+    ${SEC.map(p=>uRow(p,true)).join('')}
+  </div>`:''}
+  ${showReg?`<div class="list">
+    <div class="ghead">常规更新 <span class="num">${S.uScope==='全部'?31:reg.length}</span><span class="r">批次 2/6 已完成</span></div>
+    ${reg.map(p=>uRow(p,false)).join('')}
+  </div>`:''}`;
+}
+
+function libMatch([n,k,v,l,sz,at,f,tap]){
+  const fl=f.split(' ');
+  if(S.lScope==='formula'&&k!=='formula')return false;
+  if(S.lScope==='cask'&&k!=='cask')return false;
+  if(S.lScope==='可更新'&&!l)return false;
+  if(S.lScope==='有已知漏洞'&&!f.includes('vuln'))return false;
+  for(const x of S.lf){ if(x.startsWith('tap:')){ if(tap!==x.slice(4))return false; } else if(!fl.includes(x))return false; }
+  return true;
+}
+function filterMenu(){
+  const tapOn = [...S.lf].find(x=>x.startsWith('tap:'));
+  return `<div class="fmenu glass strong" role="menu" aria-label="附加筛选">
+    ${['pin','manual','keg'].map(k=>`<div class="mi" data-lf="${k}" role="menuitemcheckbox" aria-checked="${S.lf.has(k)}"><span class="ck">${S.lf.has(k)?'✓':''}</span>${LF_LABEL[k]}<span class="c">${{pin:2,manual:41,keg:4}[k]}</span></div>`).join('')}
+    <div class="sepl"></div><div class="mh">tap（单选）</div>
+    <div class="mi" data-lf="tap:"><span class="ck">${tapOn?'':'✓'}</span>全部 tap</div>
+    ${TAPS.map(([t,c])=>`<div class="mi" data-lf="tap:${t}" role="menuitemradio"><span class="ck">${tapOn==='tap:'+t?'✓':''}</span><span class="mono" style="font-size:12px">${t}</span><span class="c">${c}</span></div>`).join('')}
+  </div>`;
+}
+function library(){
+  const vis = LIB.filter(libMatch);
+  const nf = S.lf.size;
+  const tokens = nf ? `<div class="tokens" aria-label="已启用筛选：${[...S.lf].map(x=>x.startsWith('tap:')?'tap '+x.slice(4):LF_LABEL[x]).join('，')}">${[...S.lf].map(x=>`<span class="token">${x.startsWith('tap:')?'tap: '+x.slice(4):LF_LABEL[x]}<button data-lfx="${x}" aria-label="移除筛选">✕</button></span>`).join('')}${nf>=2?'<a class="linkbtn" data-lfclear>清除全部</a>':''}</div>` : '';
+  const rows = vis.map(([n,k,v,l,sz,at,f])=>{
+    const b = (f.includes('pin')?bdg('已锁定','b-gray','⌖'):'') + (f.includes('vuln')?bdg('有已知漏洞', f.includes('critical')?'b-red':f.includes('high')?'b-orange':'b-yellow','!'):'') + (f.includes('keg')?bdg('keg-only','b-gray'):'');
+    return `<div class="row l-row ${S.libSel.has(n)?'sel':''}" data-detail="${n}"><span class="cb ${S.libSel.has(n)?'on':''}" data-lsel="${n}">${S.libSel.has(n)?'✓':''}</span>
+      <div class="nm">${n} ${b}</div>${bdg(k,k==='cask'?'b-blue':'b-accent')}
+      <span class="ver old">${v}</span><span class="ver">${l?`<b>${l}</b>`:'<span class="t3" style="font-family:var(--font)">已是最新</span>'}</span>
+      <span class="num t2 hide-n">${sz}</span><span class="t2 hide-n">${at}</span></div>`;
+  }).join('');
+  return `
+  <div class="hero"><div><h1>资料库</h1><div class="sub">59 个包 · 52 formula · 7 cask · 36 个可更新</div></div>
+    <div class="acts"><button class="btn g">导出 Brewfile</button></div></div>
+  <div class="scopeRow">${scope([['全部',59],['formula',52],['cask',7],['可更新',36],['有已知漏洞',6]],S.lScope,'l')}
+    <div style="position:relative"><button class="btn g fbtn ${nf?'act':''}" data-fmenu aria-haspopup="menu">筛选${nf?` ${nf}`:''} ⌄</button>${S.fmenu?filterMenu():''}</div>
+    <span class="r">排序：名称 ⌄</span></div>
+  ${tokens}
+  <div class="list">
+    <div class="row l-row l-head"><span></span><span>包</span><span>类型</span><span>已安装</span><span>最新</span><span class="hide-n">体积</span><span class="hide-n">安装时间</span></div>
+    ${rows || `<div class="empty">没有匹配的包。试试更换关键词或筛选条件。<div style="margin-top:10px;display:flex;gap:8px;justify-content:center"><button class="btn g sm" data-lfclear>清除筛选</button><button class="btn g sm" data-go="discover">在 Homebrew 中搜索</button></div></div>`}
+  </div>`;
+}
+
+function discover(){
+  // UX O-10：发现页只是搜索结果页，没有「快捷筛选」伪分类；依赖行的「在 Homebrew 中搜索」也落到这里（预填包名）
+  const qy = S.query||'json';
+  const r = qy==='perl' ? [['perl','formula','功能丰富的文本处理语言','5.42.0']]
+    : [['jq','formula','命令行 JSON 处理器','1.8.1',true],['fx','formula','终端 JSON 查看器','36.0.0'],['jless','formula','JSON 分页浏览器','0.9.0'],['gron','formula','把 JSON 变成可 grep 的行','0.7.1'],['jsonlint','formula','JSON 校验工具','1.6.3'],['json-viewer','cask','JSON 桌面查看器','2.1.0']];
+  return `
+  <div class="hero"><div><h1 style="font-size:22px">在 Homebrew 中搜索 “${qy}”</h1><div class="sub">formulae.brew.sh · ${r.length} 个结果 · ${r.filter(x=>x[4]).length} 个已安装</div></div>
+    <div class="acts">${scope([['全部'],['formula'],['cask']],'全部','d').replace('margin-bottom:12px','')}</div></div>
+  <div class="notice blue glass"><span style="color:var(--blue)">ⓘ</span>使用 2 小时前的本地缓存，结果可能不是最新。<button class="btn g sm r">刷新</button></div>
+  <div class="list">${r.map(([n,k,d,v,i])=>`<div class="row" style="grid-template-columns:minmax(0,1fr) 80px 90px" data-detail="${n}"><div><div class="nm">${n} ${bdg(k,k==='cask'?'b-blue':'b-accent')} ${i?bdg('已安装','b-green','✓'):''}</div><div class="ds">${d}</div></div><span class="ver old">${v}</span><span style="text-align:right">${i?'<button class="btn g sm">详情</button>':'<button class="btn g sm">安装</button>'}</span></div>`).join('')}</div>`;
+}
+
+function services(){
+  const P={run:['运行中','b-green','●'],stop:['已停止','b-gray','○'],err:['异常','b-red','●']};
+  return `
+  <div class="hero"><div><h1>服务</h1><div class="sub">4 个服务 · 3 个运行中 · 由 launchd 托管</div></div><div class="acts"><button class="btn g">↻ 刷新</button></div></div>
+  <div class="notice blue glass"><span style="color:var(--blue)">ⓘ</span>「启动 / 停止」会修改 ~/Library/LaunchAgents 中的 plist，并影响登录自启。所有操作都需要确认。</div>
+  <div class="list">${SVC.map(s=>{const [t,c,i]=P[s.st];return `<div class="row s-row"><span class="pill ${c}"><i style="font-style:normal">${i}</i>${t}</span>
+    <div><div class="nm">${s.n}</div><div class="ds mono" style="font-size:11.5px">${s.st==='err'?'<span style="color:var(--red);font-family:var(--font)">上次退出码 1 · 端口 80 已被占用</span>':s.file}</div></div>
+    <span style="display:flex;gap:6px">${s.st==='err'?'<button class="btn g sm">查看日志</button>':''}${s.st==='run'?'<button class="btn g sm">停止…</button>':'<button class="btn g sm">启动…</button>'}<button class="btn g sm">⋯</button></span></div>`;}).join('')}</div>`;
+}
+
+function maintenance(){
+  // UX O-09：「需要处理」的卡按严重度置顶；其余收进「一切正常」折叠区（可回收 ≤ 500 MB 视为正常）
+  return `
+  <div class="hero"><div><h1>维护</h1><div class="sub">2 项需要处理 · doctor 2 条提示 · 3 个孤立依赖</div></div><div class="acts"><button class="btn p">运行诊断</button></div></div>
+  <div class="sech"><span style="color:var(--orange)">▲</span>需要处理 · 2</div>
+  <div class="grid2" style="margin-bottom:14px">
+    <div class="card"><h3>Homebrew 健康 <span class="r">${bdg('2 条提示','b-orange','▲')}</span></h3>
+      <div class="miniRow"><span style="color:var(--orange)">▲</span>doctor：有未链接的 keg（openssl@3）<span class="r">警告</span></div>
+      <div class="miniRow"><span style="color:var(--orange)">▲</span>doctor：Xcode Command Line Tools 有更新<span class="r">警告</span></div>
+      <div class="miniRow"><span style="color:var(--green)">✓</span>missing：未发现缺失依赖<span class="r"></span></div></div>
+    <div class="card"><h3>孤立依赖</h3><div class="t2" style="margin-bottom:8px">3 个包已不再被任何已安装包需要（autoremove 预览）</div>
+      <div class="chips"><span class="chip">libyaml</span><span class="chip">m4</span><span class="chip">pkgconf</span></div>
+      <div style="display:flex;gap:8px"><button class="btn g sm">预览</button><button class="btn g sm">移除…</button></div></div>
+  </div>
+  <details class="ok" open><summary><span style="color:var(--green)">✓</span><b style="color:var(--t1)">一切正常 · 3</b><span class="t3">缓存与旧版本 485 MB · Brewfile · Homebrew 目录</span><span style="margin-left:auto" class="t3">⌄</span></summary>
+  <div class="grid2" style="margin-bottom:14px">
+    <div class="card"><h3>缓存与旧版本</h3><div class="metric" style="padding:0;cursor:default">${ring(.37,'var(--orange)')}<div><div class="v">485 MB</div><div class="l">缓存 175 MB · 旧版本 310 MB</div></div></div>
+      <div style="display:flex;gap:8px;margin-top:12px"><button class="btn g sm">预览</button><button class="btn g sm">清理…</button></div></div>
+    <div class="card"><h3>Brewfile</h3><div class="t2" style="margin-bottom:12px">上次导出 10月12日 · 59 条</div>
+      <div style="display:flex;gap:8px"><button class="btn g sm">导出</button><button class="btn g sm">导入…</button><button class="btn g sm">在 Finder 中显示</button></div></div>
+  </div>
+  <div class="card"><h3>Homebrew 目录</h3><div class="meta">
+    <div class="kv"><span>前缀</span><span class="mono">/opt/homebrew</span></div><div class="kv"><span>Cellar</span><span class="num">1.1 GB</span></div>
+    <div class="kv"><span>缓存</span><span class="num">175 MB</span></div><div class="kv"><span>Caskroom</span><span class="num">0 B</span></div></div></div>
+  </details>`;
+}
+
+function detail(){
+  const tabs = ['概览','安全','依赖','被依赖','文件','历史'];
+  // UX O-03：未安装的依赖不再给永久禁用的「安装」，而是「在 Homebrew 中搜索」（进入发现页并预填，安装仍走发现页的确认）
+  const deps = `
+    <div class="list"><div class="ghead">运行依赖 1</div>
+      <div class="row" style="grid-template-columns:minmax(0,1fr) auto auto" data-detail="ca-certificates"><div><div class="nm">ca-certificates ${bdg('已安装','b-green','✓')}</div><div class="ds">Mozilla CA 证书包</div></div><span class="ver old">2025-09-09</span><span class="t3">›</span></div></div>
+    <div class="list"><div class="ghead">构建依赖 1 <span class="r t3">只在从源码构建时需要，不影响使用</span></div>
+      <div class="row" style="grid-template-columns:minmax(0,1fr) auto"><div><div class="nm">perl ${bdg('未安装','b-gray')}</div><div class="ds">功能丰富的文本处理语言</div></div><a class="linkbtn" data-searchdep="perl">在 Homebrew 中搜索 perl ›</a></div></div>`;
+  const body = S.dTab==='依赖' ? deps : S.dTab==='安全' ? `
+    <div class="list"><div class="ghead">已知漏洞 1</div>
+      <div class="row" style="grid-template-columns:auto 1fr auto"><span>${sev('critical')}</span><div><div class="nm mono">CVE-2025-9230</div><div class="ds">CVSS 9.8 · 影响 &lt; 3.6.1 · 修复版本 <span class="mono">3.6.1</span> · 来源 OSV</div></div><button class="btn g sm">在 OSV 查看</button></div></div>
+    <div class="card"><h3>本次扫描</h3><div class="meta">
+      <div class="kv"><span>时间</span><span>11月7日 14:02（18 分钟前）</span></div><div class="kv"><span>覆盖</span><span class="num">36/59 · 部分覆盖</span></div>
+      <div class="kv"><span>跳过</span><span>23 个（cask / 第三方 tap / 缺元数据）</span></div><div class="kv"><span>退出码</span><span>1（发现漏洞，属预期）</span></div></div></div>`
+  : `
+    <div class="notice red glass"><span style="color:var(--red)">⛔</span><div><b>严重 · CVE-2025-9230</b> <span class="t2">修复版本 3.6.1 可用 ·</span> <a class="linkbtn" title="定位到页头的「更新到 3.6.1」">更新到修复版本</a></div><button class="btn g sm r" data-dtab="安全">查看安全详情</button></div>
+    <div class="card" style="margin-bottom:14px"><h3>关于</h3><div class="meta">
+      <div class="kv"><span>已安装</span><span class="mono">3.6.0</span></div><div class="kv"><span>最新</span><span class="mono" style="color:var(--accent);font-weight:700">3.6.1</span></div>
+      <div class="kv"><span>tap</span><span>homebrew/core</span></div><div class="kv"><span>许可</span><span>Apache-2.0</span></div>
+      <div class="kv"><span>体积</span><span class="num">34 MB</span></div><div class="kv"><span>安装于</span><span>3月14日 · 作为依赖</span></div>
+      <div class="kv"><span>依赖</span><span>ca-certificates</span></div><div class="kv"><span>被依赖</span><span>10 个包</span></div></div></div>
+    <div class="card" style="margin-bottom:14px"><h3>CAVEATS · keg-only</h3><div class="t2">openssl@3 是 keg-only：macOS 自带 LibreSSL，因此不会链接到 /opt/homebrew。如需编译时使用，请设置 LDFLAGS / CPPFLAGS。</div></div>
+    <div class="card"><h3>安装命令</h3><div class="codebox">brew install openssl@3 <button class="btn g sm" style="margin-left:auto">复制</button></div></div>`;
+  return `
+  <div style="margin-bottom:12px"><button class="btn g sm" data-back>‹ ${S.prev==='updates'?'更新':S.prev==='overview'?'概览':'资料库'}</button></div>
+  <div class="dhead"><div class="dicon">⌘</div><div style="flex:1"><h1>openssl@3</h1>
+    <div style="display:flex;gap:6px;margin:4px 0">${bdg('formula','b-accent')}${bdg('可更新','b-accent','↑')}${bdg('有已知漏洞','b-red','⛔')}${bdg('keg-only','b-gray')}</div>
+    <div class="t2">TLS/SSL 加密工具包 · homebrew/core</div></div>
+    <div style="display:flex;gap:8px"><button class="btn p">更新到 3.6.1</button><button class="btn g">⋯</button></div></div>
+  ${scope(tabs.map(t=>[t]),S.dTab,'dt')}
+  ${body}`;
+}
+
+function inspector(){
+  return `
+  <div class="isec"><h4>操作</h4><div class="igroup">
+    <button class="ibtn">⬆ 更新到 3.6.1</button><button class="ibtn">⌖ 锁定</button><button class="ibtn" data-sheet="reinstall" data-target="openssl@3">↻ 重新安装…</button><button class="ibtn">⧉ 复制安装命令</button><button class="ibtn">◫ 在 Finder 中显示</button></div></div>
+  <div class="isec"><h4>概要</h4><div class="igroup">
+    <div class="kv"><span>类型</span><span>formula</span></div><div class="kv"><span>版本</span><span class="ver"><span class="old">3.6.0</span> → <b>3.6.1</b></span></div>
+    <div class="kv"><span>体积</span><span>34 MB</span></div><div class="kv"><span>tap</span><span>homebrew/core</span></div></div></div>
+  <div class="isec"><h4>健康</h4><div class="igroup">
+    <div class="kv"><span>漏洞</span><span>${sev('critical')}</span></div><div class="kv"><span>修复</span><span style="color:var(--green)">修复可用</span></div>
+    <div class="kv"><span>本次扫描</span><span>18 分钟前 · 36/59</span></div></div></div>
+  <div class="isec"><h4>被依赖 · 10</h4><div class="igroup" style="padding:8px 12px"><div class="chips" style="margin:0"><span class="chip">curl</span><span class="chip">git</span><span class="chip">node</span><span class="chip">python@3.13</span><span class="chip">wget</span><span class="chip">+5</span></div></div></div>
+  <div class="isec"><h4>危险区</h4><div class="igroup"><button class="ibtn red" data-sheet="uninstall" data-target="openssl@3">卸载…</button></div></div>`;
+}
+
+function settingsWin(){
+  const tabs=[['⚙','通用'],['🍺','Homebrew'],['◎','网络'],['🔔','通知'],['⛨','隐私'],['ⓘ','关于']];
+  const cur = S.setTab==='homebrew'?'Homebrew':S.setTab;
+  const body = cur==='Homebrew' ? `
+      <div class="fgroup">
+        <div class="frow"><div>brew 路径<div class="d">自动探测到 1 个候选</div></div><span class="mono t2">/opt/homebrew/bin/brew ⌄</span></div>
+        <div class="frow"><div>版本 · 前缀</div><span class="t2">7.0.10 · <span class="mono">/opt/homebrew</span></span></div>
+      </div>
+      <div class="fgroup">
+        <div class="frow"><div>贪婪模式<div class="d">「检查更新」与「全部更新」包含自带自动更新的 cask。开启后更新页副标题显示「含自动更新的 cask」</div></div><span class="toggle"></span></div>
+        <div class="frow"><div>更新后不自动清理旧版本<div class="d">保留旧版本便于手动回退；可在维护页统一清理</div></div><span class="toggle"></span></div>
+      </div>
+      <div class="fgroup">
+        <div class="frow"><div class="d">ⓘ 手动「检查更新」（⌘R）会先同步 Homebrew 索引再检查可更新项；每 24 小时的自动检查只读本地索引，不同步上游。</div></div>
+      </div>`
+    : `
+      <div class="fgroup">
+        <div class="frow"><div>外观</div><div class="seg"><span class="on">跟随系统</span><span>浅色</span><span>深色</span></div></div>
+        <div class="frow"><div>在菜单栏显示 Brewbutler<div class="d">显示可更新数，点击打开快捷面板</div></div><span class="toggle on"></span></div>
+        <div class="frow"><div>自动检查更新<div class="d">只读：每 24 小时用本地索引检查一次可更新项，不同步上游、不安装任何东西</div></div><span class="toggle on"></span></div>
+      </div>
+      <div class="fgroup">
+        <div class="frow"><div>强调色</div><div class="t2">跟随系统设置（系统设置 › 外观）</div></div>
+      </div>
+      <div class="fgroup">
+        <div class="frow"><div>重新显示首次启动引导</div><button class="btn g sm" data-onboard>显示</button></div>
+      </div>`;
+  return `<div class="settings">
+    <div class="stb"><div class="lights" style="left:16px;top:16px"><i></i><i></i><i></i></div><b>${cur}</b>
+      <div class="stabs glass">${tabs.map(([i,t])=>`<button class="${t===cur?'on':''}" data-settab="${t}">${i}<span>${t}</span></button>`).join('')}</div></div>
+    <div class="sbody">${body}
+    </div></div>`;
+}
+
+function uninstallSheet(){
+  if(S.target==='openssl@3') return `<div class="sheet glass strong" role="dialog" aria-label="卸载确认">
+    <div class="sic">⌫</div><h2>卸载 openssl@3？</h2>
+    <p>openssl@3 被 <b>10 个包</b>依赖（curl、git、node、python@3.13、wget 等），卸载后它们可能无法运行。</p>
+    <div class="notice orange glass" style="margin-bottom:0"><span style="color:var(--orange)">▲</span><span>请先卸载依赖它的包，或保留 openssl@3。</span></div>
+    <div class="acts"><button class="btn g focusring" data-close>取消</button><button class="btn danger" disabled>卸载</button></div></div>`;
+  const ok = !S.zap || S.zapText==='visual-studio-code';
+  return `<div class="sheet glass strong" role="dialog" aria-label="卸载确认">
+    <div class="sic">⌫</div><h2>卸载 visual-studio-code？</h2>
+    <p>cask · 将移除 /Applications/Visual Studio Code.app。没有其他包依赖它。</p>
+    <div class="opt"><div>同时删除关联文件<div class="t3" style="font-size:11.5px">偏好设置、缓存与支持文件，无法恢复</div></div><span class="toggle ${S.zap?'on':''}" data-zap></span></div>
+    ${S.zap?`<div style="margin-bottom:4px" class="t2">输入包名 <b class="mono">visual-studio-code</b> 以确认：</div><input class="field" id="zapInput" value="${S.zapText}" placeholder="visual-studio-code">`:''}
+    <div class="acts"><button class="btn g ${S.zap?'':'focusring'}" data-close>取消</button><button class="btn danger" ${ok?'':'disabled'}>${S.zap?'卸载并删除关联文件':'卸载'}</button></div></div>`;
+}
+
+// UX O-03：带「…」的按钮必须进入确认；重新安装默认焦点「取消」
+function reinstallSheet(){
+  return `<div class="sheet glass strong" role="dialog" aria-label="重新安装确认">
+    <div class="sic" style="background:color-mix(in srgb,var(--orange) 16%,transparent);color:var(--orange)">↻</div><h2>重新安装 ${S.target}？</h2>
+    <p>会重新下载并覆盖当前版本（<span class="mono">3.6.0</span>）的文件，不改变版本号。</p>
+    <div class="notice blue glass" style="margin-bottom:0"><span style="color:var(--blue)">ⓘ</span><span>任务进入队列，进度显示在底部任务岛。失败不会自动重试或回滚。</span></div>
+    <div class="acts"><button class="btn g focusring" data-close>取消</button><button class="btn p">重新安装</button></div></div>`;
+}
+
+// UX O-11：首启引导 3 步；检测成功后索引已在后台开始
+function onboarding(){
+  const st=S.onboard, dots=`<span class="dots">${[1,2,3].map(i=>`<i class="${i===st?'on':''}"></i>`).join('')}</span>`;
+  const step = st===1 ? `
+    <h2>检测 Homebrew</h2><div class="lead">Brewbutler 帮你看清本机 Homebrew 装了什么、能否安全更新。</div>
+    <div class="cand on"><span class="radio"></span><div style="flex:1"><b class="mono">/opt/homebrew/bin/brew</b><div class="t2" style="font-size:12px">Homebrew 7.0.10 · Apple 芯片默认位置</div></div>${bdg('可用','b-green','✓')}</div>
+    <div class="cand"><span class="radio"></span><div style="flex:1"><b class="mono">/usr/local/bin/brew</b><div class="t2" style="font-size:12px">Homebrew 4.6.2 · Intel 旧位置</div></div>${bdg('可用','b-green','✓')}</div>
+    <div class="t2" style="font-size:12px;display:flex;align-items:center;gap:8px;margin-top:10px"><span class="spin"></span>正在后台载入已安装的包（59 个）…你可以继续下一步。</div>
+    <div style="margin-top:8px"><a class="linkbtn">手动指定路径…</a></div>`
+  : st===2 ? `
+    <h2>隐私与安全</h2><div class="lead">在开始之前，你需要知道这三件事。</div>
+    <div class="pr"><span style="color:var(--accent);font-size:18px">⛨</span><div><b>不需要账号，不上传任何东西</b><div class="t2">包列表、命令输出和环境信息都只留在这台 Mac 上。</div></div></div>
+    <div class="pr"><span style="color:var(--orange);font-size:18px">▲</span><div><b>危险操作一定会先问你</b><div class="t2">卸载、清理、重新安装、服务启停都需要二次确认，默认焦点在「取消」。</div></div></div>
+    <div class="pr"><span style="color:var(--green);font-size:18px">🔑</span><div><b>永远不会索要管理员密码</b><div class="t2">需要管理员权限的操作会给出终端命令，由你自己执行。</div></div></div>`
+  : `
+    <h2>准备好了</h2><div class="lead">已安装的 59 个包已经载入。两个快捷键就够你开始：</div>
+    <div class="pr"><span class="kbd" style="font-size:13px;padding:2px 8px">⌘K</span><div><b>命令面板</b><div class="t2">跳转页面、找包、执行操作。</div></div></div>
+    <div class="pr"><span class="kbd" style="font-size:13px;padding:2px 8px">⌘R</span><div><b>检查更新</b><div class="t2">先同步 Homebrew 索引，再检查哪些包可以更新。</div></div></div>
+    <label style="display:flex;gap:10px;align-items:center;margin-top:14px;cursor:pointer" data-onbscan><span class="chk ${S.onbScan?'on':''}">${S.onbScan?'✓':''}</span>现在运行一次安全扫描（约 30 秒）</label>`;
+  return `<div class="onb glass strong" role="dialog" aria-label="首次启动引导，第 ${st} 步，共 3 步">${step}
+    <div class="foot">${dots}<button class="btn" data-onbskip>跳过</button>${st>1?'<button class="btn g" data-onbprev>上一步</button>':''}<button class="btn p" data-onbnext>${st===3?'开始使用':'下一步'}</button></div></div>`;
+}
+
+function palette(){
+  const items = [
+    ['页面',[['▦ 概览','⌘1','overview'],['⬇ 更新','⌘2','updates'],['▤ 资料库','⌘3','library'],['⚙ 服务','⌘4','services'],['✦ 维护','⌘5','maintenance']]],
+    ['包',[['openssl@3 <span class="t3 mono">3.6.0 → 3.6.1</span> '+sev('critical'),'','detail'],['node <span class="t3 mono">24.9.0 → 24.9.1</span>','','detail']]],
+    ['操作',[['↻ 检查更新','⌘R'],['⛨ 运行安全扫描','⇧⌘V'],['✦ 清理…','⇧⌘K'],['✚ 运行 brew doctor','⇧⌘D'],['◐ 展开任务岛','⌥⌘L']]],
+    ['远端',[['🔍 在 Homebrew 中搜索 “'+(S.query||'json')+'”','↵','discover']]],
+  ];
+  let k=0;
+  return `<div class="palette glass strong" role="dialog" aria-label="命令面板"><div class="pi">🔍<input id="palInput" placeholder="页面、包或操作…" value="${S.query}"><span class="kbd">esc</span></div>
+    ${items.map(([h,list])=>`<div class="pgroup"><h5>${h}</h5>${list.map(([t,kb,go])=>`<div class="pitem ${k++===S.palIdx?'on':''}" data-pgo="${go||''}">${t}${kb?`<span class="kbd">${kb}</span>`:''}</div>`).join('')}</div>`).join('')}
+    <div class="pfoot"><span>↑↓ 选择</span><span>↵ 打开</span><span>esc 关闭</span></div></div>`;
+}
+
+/* ============ 任务岛 / 浮动栏 / toast ============ */
+function floatzone(){
+  let h='';
+  const selN = S.screen==='updates'?S.sel.size:S.screen==='library'?S.libSel.size:0;
+  if(selN && !islOpen()){
+    h+= S.screen==='updates'
+      ? `<div class="fbar glass"><b class="num">已选 ${selN} 项</b><button class="btn p sm">更新所选</button><button class="btn g sm">预览</button><button class="btn sm" data-clear>取消选择</button></div>`
+      : `<div class="fbar glass"><b class="num">已选 ${selN} 项</b><button class="btn p sm">更新</button><button class="btn g sm">锁定</button><button class="btn g sm" data-sheet="uninstall">卸载…</button><button class="btn sm" data-clear>取消选择</button></div>`;
+  }
+  if(islOpen()){
+    const showRows = S.screen!=='updates';
+    const done = S.isl==='summary';
+    const body = S.iTab==='汇总' ? `
+        <div class="sumgrid"><div><b style="color:var(--green)">5</b><span class="t2">成功</span></div><div><b style="color:var(--red)">1</b><span class="t2">失败</span></div><div><b>0</b><span class="t2">未验证</span></div><div><b>0</b><span class="t2">已取消</span></div></div>
+        <div class="prow"><span style="color:var(--red)">✕</span><b>aom</b><span style="color:var(--red)" class="mono">退出码 1 · Error: Failed to download resource "aom--3.12.2"</span><span style="display:flex;gap:6px"><button class="btn g sm" data-itab="日志">查看日志</button><button class="btn g sm">重试…</button></span></div>
+        <div class="prow"><span style="color:var(--green)">✓</span><b>librsvg 等 5 个</b><span class="t2">ffmpeg · librsvg · jq · wget · sqlite</span><span></span></div>
+        <div class="notice orange" style="margin:10px 8px 0;padding:8px 12px"><span style="color:var(--orange)">▲</span><span>已安装的包有变化，扫描结果可能已过时。</span><button class="btn g sm r">重新扫描</button></div>`
+      : S.iTab==='日志' ? `<div class="console" role="log">
+<div class="m">$ brew upgrade ffmpeg</div><div class="h">==&gt; Upgrading 1 outdated package:</div><div>ffmpeg 7.1 -&gt; 7.1.1</div><div class="h">==&gt; Fetching ffmpeg</div><div>==&gt; Downloading https://ghcr.io/v2/homebrew/core/ffmpeg/blobs/sha256:4c1e…</div><div class="m">############################################ 61.4%</div></div>`
+      : S.iTab==='队列' ? ['jq','wget','sqlite'].map((n,i)=>`<div class="prow"><span class="t3">${i+1}</span><b>更新 ${n}</b><span class="t2 mono">brew upgrade ${n}</span><button class="btn sm">移除</button></div>`).join('')
+      : S.iTab==='历史' ? `<div class="prow"><span style="color:var(--green)">✓</span><b>更新 librsvg</b><span class="t2">2 分钟前 · 14s · 退出码 0</span><button class="btn g sm">日志</button></div><div class="prow"><span style="color:var(--red)">✕</span><b>更新 aom</b><span class="t2">3 分钟前 · 退出码 1</span><button class="btn g sm">重试…</button></div><div class="prow"><span style="color:var(--green)">✓</span><b>安全扫描</b><span class="t2">18 分钟前 · 31.4s · 退出码 1（发现漏洞，属预期）</span><button class="btn g sm">日志</button></div>`
+      : showRows ? `<div class="prow"><span style="color:var(--green)">✓</span><b>librsvg</b><span class="t2">完成 · 14s</span><span></span></div>
+        <div class="prow"><span style="color:var(--red)">✕</span><b>aom</b><span style="color:var(--red)" class="mono">退出码 1 · Failed to download resource</span><span style="display:flex;gap:6px"><button class="btn g sm">复制</button><button class="btn g sm">重试…</button></span></div>
+        <div class="prow"><span class="spin"></span><b>ffmpeg</b><span class="t2">正在下载… <span class="indet" style="display:inline-block;vertical-align:middle;margin:0 0 0 6px"></span></span><span></span></div>
+        <div class="prow"><span class="t3">◷</span><b>jq</b><span class="t2">排队中</span><span></span></div>
+        <div class="prow"><span class="t3">◷</span><b>wget</b><span class="t2">排队中</span><span></span></div>`
+      : `<div class="empty">逐包进度已显示在更新列表中。</div>`;
+    h+=`<div class="panel glass strong" role="region" aria-label="任务岛">
+      ${done
+        ? `<div class="ph"><span style="color:var(--red);font-size:15px">✕</span><span class="ttl">更新 6 个包 · 已结束</span><span class="t2 num">5 个成功 · 1 个失败 · 用时 03:12</span>
+        <span style="margin-left:auto;display:flex;gap:6px"><button class="btn sm" data-island title="收起 ⌥⌘L">⌄</button></span></div>
+      <div class="prog"><i style="width:100%;background:linear-gradient(90deg,var(--green) 83%,var(--red) 83%)"></i></div>`
+        : `<div class="ph"><span class="spin"></span><span class="ttl">更新 6 个包</span><span class="t2 num">2/6 已完成 · 已用 01:24</span>
+        <span style="margin-left:auto;display:flex;gap:6px"><button class="btn g sm">⏸ 暂停</button><button class="btn g sm">取消</button><button class="btn sm" data-island title="收起 ⌥⌘L">⌄</button></span></div>
+      <div class="prog"><i style="width:33%"></i></div>`}
+      <div class="tabs">${scope(done?[['汇总'],['日志'],['历史']]:[['进度'],['日志'],['队列',3],['历史']],S.iTab,'it').replace('margin-bottom:12px','')}</div>
+      <div class="pb">${body}</div></div>`;
+  } else if(S.isl==='result'){
+    // 批次结果态：有失败 → 常驻，直到用户点开；全部成功时 5 秒后淡出（这里演示有失败的情况）
+    h+=`<div class="islandRow"><div class="island glass res fail" data-island role="button" aria-label="批次结果：6 个包已处理，1 个失败。点击查看汇总">
+        <span style="color:var(--red);font-size:15px">✕</span><span class="ttl">6 个包已处理 · <span style="color:var(--red)">1 个失败</span></span><span class="t2">›</span></div></div>`;
+  } else if(S.isl==='sync'){
+    h+=`<div class="islandRow"><div class="island glass" data-island role="button" aria-label="任务岛：正在同步 Homebrew 索引，完成后检查可更新项">
+        <span class="spin"></span><span class="ttl">正在同步 Homebrew 索引…</span><span class="t2">完成后检查可更新项 · 已用 00:06</span>
+        <span style="margin-left:auto;display:flex"><span class="ib" title="取消（仍会用本地索引完成检查）">✕</span><span class="ib" title="展开 ⌥⌘L">⌃</span></span></div></div>`;
+  } else {
+    h+=`<div class="islandRow">${S.toast?`<div class="toast glass" data-toast><span style="color:var(--green)">✓</span>librsvg 已更新到 2.63.4</div>`:''}
+      <div class="island glass" data-island role="button" aria-label="任务岛：正在更新 ffmpeg，2/6 已完成。点击展开">
+        <span class="spin"></span><span class="ttl">更新 ffmpeg</span><span class="t2 num">2/6 · 已用 01:24</span>
+        <span style="margin-left:auto;display:flex"><span class="ib" title="暂停">⏸</span><span class="ib" title="取消">✕</span><span class="ib" title="展开 ⌥⌘L">⌃</span></span></div></div>`;
+  }
+  return h;
+}
+
+/* ============ 渲染 ============ */
+function render(){
+  document.body.className = (S.theme==='dark'?'dark ':'') + (S.reduce?'reduce ':'') + (S.motion?'':'motion-off');
+  document.documentElement.style.setProperty('--accent', S.accent);
+  const win=$('#win'); win.classList.toggle('narrow',S.narrow); win.classList.toggle('has-inspector',S.screen==='detail');
+  const active = S.screen==='detail'?S.prev:S.screen;
+  $('#nav').innerHTML = NAV.map(([k,t,i,b])=>`<button class="${k===active&&S.screen!=='discover'?'on':''}" data-go="${k}"><span class="ico">${i}</span>${t}<span class="badge ${k==='updates'?'red':''}">${b}</span></button>`).join('');
+  const title = {overview:'概览',updates:'更新',library:'资料库',services:'服务',maintenance:'维护',discover:'发现',detail:'openssl@3'}[S.screen];
+  $('#toolbar').innerHTML = `
+    <div class="tgroup glass"><button title="返回 ⌘[" data-back>‹</button><button title="前进">›</button></div>
+    <span class="ttitle">${title}</span>
+    <div class="search glass" id="searchBox">🔍<input id="search" placeholder="搜索包或命令" value="${S.query}"><span class="kbd">⌘F</span>
+      <div class="suggest glass strong" id="suggest"></div></div>
+    <div class="tgroup glass"><button title="检查更新 ⌘R（先同步 Homebrew 索引）" data-check>↻</button><button title="安全扫描 ⇧⌘V">⛨</button><button title="命令面板 ⌘K" data-pal>⌘K</button></div>
+    ${S.screen==='detail'?'<div class="tgroup glass"><button title="检查器">◧</button></div>':''}`;
+  const pages={overview,updates,library,discover,services,maintenance,detail};
+  $('#content').innerHTML = pages[S.screen]();
+  const ins=$('#inspector'); ins.classList.toggle('hidden',S.screen!=='detail'); if(S.screen==='detail') ins.innerHTML=inspector();
+  $('#floatzone').innerHTML = floatzone();
+  let ov='';
+  if(S.onboard) ov=`<div class="scrim">${onboarding()}</div>`;
+  else if(S.palette) ov=`<div class="scrim" data-scrim>${palette()}</div>`;
+  else if(S.sheet==='uninstall') ov=`<div class="scrim" data-scrim>${uninstallSheet()}</div>`;
+  else if(S.sheet==='reinstall') ov=`<div class="scrim" data-scrim>${reinstallSheet()}</div>`;
+  else if(S.settings) ov=`<div class="scrim" data-scrim>${settingsWin()}</div>`;
+  $('#overlay').innerHTML=ov;
+  $('#syncAge').textContent='上游同步于 '+(S.syncFail?'2 小时前':'8 分钟前');
+  $('#dock').classList.toggle('hidden',!S.dock); renderDock(); placePills(); fit();
+  const zi=$('#zapInput'); if(zi){zi.focus();zi.setSelectionRange(zi.value.length,zi.value.length);}
+  const pi=$('#palInput'); if(pi){pi.focus();pi.setSelectionRange(pi.value.length,pi.value.length);}
+}
+function renderDock(){
+  const acc=['#0A84FF','#BF5AF2','#FF375F','#FF9F0A','#30D158','#8E8E93'];
+  $('#dock').innerHTML = `<span class="lbl">演示</span>
+    <button class="${S.theme==='light'?'on':''}" data-theme="light">浅色</button><button class="${S.theme==='dark'?'on':''}" data-theme="dark">深色</button>
+    <button class="${S.reduce?'on':''}" data-reduce>降低透明度</button><button class="${S.motion?'':'on'}" data-motion>减少动效</button>
+    <button class="${S.narrow?'on':''}" data-narrow>1024</button>
+    <span class="lbl">系统强调色</span>${acc.map(c=>`<button class="sw ${S.accent===c?'on':''}" style="background:${c}" data-accent="${c}" aria-label="强调色 ${c}"></button>`).join('')}
+    <button data-pal>⌘K</button><button data-sheet="uninstall">卸载确认</button><button data-settings>⌘, 设置</button>
+    <button class="${S.isl==='result'||S.isl==='summary'?'on':''}" data-demoresult>批次结果</button><button data-onboard>首启引导</button>`;
+}
+function fit(){
+  const w=$('#win'), W=S.narrow?1024:1280, H=S.narrow?768:820;
+  const s=Math.min(1,(innerWidth-48)/W,(innerHeight-88)/H); w.style.transform=`scale(${s})`;
+}
+
+/* ============ 交互 ============ */
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-go],[data-detail],[data-sel],[data-lsel],[data-island],[data-back],[data-clear],[data-pal],[data-sheet],[data-close],[data-zap],[data-theme],[data-reduce],[data-motion],[data-accent],[data-narrow],[data-settings],[data-scrim],[data-pgo],[data-dtab],[data-toast],[data-fmenu],[data-lf],[data-lfx],[data-lfclear],[data-check],[data-itab],[data-searchdep],[data-settab],[data-onboard],[data-onbnext],[data-onbprev],[data-onbskip],[data-onbscan],[data-demoresult],.scope button');
+  if(!t){ if(S.fmenu&&!e.target.closest('.fmenu')){S.fmenu=false;render();} return; }
+  const d=t.dataset;
+  if(t.matches('.scope button')){ const k=t.parentElement.dataset.scope, v=t.dataset.v;
+    if(k==='u')S.uScope=v; else if(k==='l')S.lScope=v; else if(k==='dt')S.dTab=v; else if(k==='it')S.iTab=v; render(); return; }
+  if(d.sel!==undefined){ e.stopPropagation(); if(t.classList.contains('dis'))return; S.sel.has(d.sel)?S.sel.delete(d.sel):S.sel.add(d.sel); render(); return; }
+  if(d.lsel!==undefined){ e.stopPropagation(); S.libSel.has(d.lsel)?S.libSel.delete(d.lsel):S.libSel.add(d.lsel); render(); return; }
+  // 资料库「筛选」菜单：已锁定 / 手动安装 / keg-only 可多选；tap 单选；均与 scope 取交集
+  if(d.fmenu!==undefined){ S.fmenu=!S.fmenu; render(); return; }
+  if(d.lf!==undefined){ const v=d.lf;
+    if(v.startsWith('tap:')){ [...S.lf].filter(x=>x.startsWith('tap:')).forEach(x=>S.lf.delete(x)); if(v!=='tap:')S.lf.add(v); S.fmenu=false; }
+    else S.lf.has(v)?S.lf.delete(v):S.lf.add(v);
+    render(); return; }
+  if(d.lfx){ S.lf.delete(d.lfx); render(); return; }
+  if(d.lfclear!==undefined){ S.lf.clear(); S.lScope='全部'; render(); return; }
+  // 任务岛：只有用户操作才展开；结果态点开 → 汇总；汇总收起 → 岛消失（已查看）
+  if(d.island!==undefined){ e.stopPropagation();
+    S.isl = {run:'open',open:'run',sync:'open',result:'summary',summary:'none',none:'open'}[S.isl];
+    if(S.isl==='summary')S.iTab='汇总'; else if(S.isl==='open'&&S.iTab==='汇总')S.iTab='进度';
+    render(); return; }
+  if(d.itab){ S.iTab=d.itab; render(); return; }
+  if(d.demoresult!==undefined){ S.isl= S.isl==='result'?'run':'result'; S.iTab='进度'; render(); return; }
+  if(d.check!==undefined){ S.isl='sync'; S.syncFail=false; render(); setTimeout(()=>{ if(S.isl==='sync'){S.isl='run';render();} },2500); return; }
+  if(d.toast!==undefined){ S.toast=false; S.isl='open'; S.iTab='历史'; render(); return; }
+  if(d.dtab){ S.dTab=d.dtab; render(); return; }
+  if(d.searchdep){ S.query=d.searchdep; S.screen='discover'; render(); $('#content').scrollTop=0; return; }
+  if(d.settab){ S.setTab=d.settab; render(); return; }
+  if(d.onboard!==undefined){ S.settings=false; S.onboard=1; render(); return; }
+  if(d.onbnext!==undefined){ if(S.onboard>=3){S.onboard=0;} else S.onboard++; render(); return; }
+  if(d.onbprev!==undefined){ S.onboard=Math.max(1,S.onboard-1); render(); return; }
+  if(d.onbskip!==undefined){ S.onboard=0; render(); return; }
+  if(d.onbscan!==undefined){ e.preventDefault(); S.onbScan=!S.onbScan; render(); return; }
+  if(d.go){ S.screen=d.go; if(islOpen())S.isl=S.isl==='summary'?'none':'run'; S.fmenu=false;
+    if(d.uscope)S.uScope=d.uscope; if(d.lfset){S.lf=new Set([d.lfset]);S.lScope='全部';}
+    render(); $('#content').scrollTop=0; return; }
+  if(d.pgo!==undefined){ S.palette=false; if(d.pgo==='detail'){S.prev='overview';S.screen='detail';} else if(d.pgo) S.screen=d.pgo; render(); return; }
+  if(d.detail){ if(S.screen==='detail')return; S.prev=S.screen==='discover'?'library':S.screen; S.screen='detail'; S.dTab='概览'; render(); $('#content').scrollTop=0; return; }
+  if(d.back!==undefined){ if(S.screen==='detail'){S.screen=S.prev;render();} return; }
+  if(d.clear!==undefined){ S.sel.clear(); S.libSel.clear(); render(); return; }
+  if(d.pal!==undefined){ S.palette=true; S.palIdx=0; render(); return; }
+  if(d.sheet){ S.sheet=d.sheet; S.target=d.target||'visual-studio-code'; S.zap=false; S.zapText=''; render(); return; }
+  if(d.settings!==undefined){ S.settings=true; render(); return; }
+  if(d.close!==undefined){ S.sheet=''; render(); return; }
+  if(d.zap!==undefined){ S.zap=!S.zap; S.zapText=''; render(); return; }
+  if(d.theme){ S.theme=d.theme; render(); return; }
+  if(d.reduce!==undefined){ S.reduce=!S.reduce; render(); return; }
+  if(d.motion!==undefined){ S.motion=!S.motion; render(); return; }
+  if(d.narrow!==undefined){ S.narrow=!S.narrow; render(); return; }
+  if(d.accent){ S.accent=d.accent; render(); return; }
+  if(d.scrim!==undefined && e.target===t){ S.palette=false; S.sheet=''; S.settings=false; render(); }
+});
+document.addEventListener('input',e=>{
+  if(e.target.id==='zapInput'){ S.zapText=e.target.value; render(); }
+  if(e.target.id==='palInput'){ S.query=e.target.value; S.palIdx=0; render(); }
+  if(e.target.id==='search'){ const v=e.target.value, sg=$('#suggest'); S.query=v;
+    sg.innerHTML = v?`<div data-go="discover">🔍 在 Homebrew 中搜索 “${v}”</div>${LIB.filter(r=>r[0].includes(v)).slice(0,4).map(r=>`<div data-detail="${r[0]}">${r[0]} <span class="t3">已安装 ${r[2]}</span></div>`).join('')}`:'';
+    sg.classList.toggle('show',!!v); }
+});
+document.addEventListener('keydown',e=>{
+  const m=e.metaKey||e.ctrlKey;
+  if(m&&e.key==='k'){e.preventDefault();S.palette=!S.palette;S.palIdx=0;render();return;}
+  if(m&&e.key===','){e.preventDefault();S.settings=true;render();return;}
+  if(m&&e.key==='f'){e.preventDefault();$('#search').focus();return;}
+  if(m&&e.altKey&&(e.key==='l'||e.key==='¬')){e.preventDefault();S.isl=islOpen()?'run':'open';render();return;}
+  if(m&&e.key==='r'){e.preventDefault();S.isl='sync';render();setTimeout(()=>{if(S.isl==='sync'){S.isl='run';render();}},2500);return;}
+  if(m&&/^[1-5]$/.test(e.key)){e.preventDefault();S.screen=NAV[+e.key-1][0];render();return;}
+  if(m&&e.key==='['){e.preventDefault();if(S.screen==='detail'){S.screen=S.prev;render();}return;}
+  if(S.palette&&(e.key==='ArrowDown'||e.key==='ArrowUp')){e.preventDefault();S.palIdx=Math.max(0,Math.min(13,S.palIdx+(e.key==='ArrowDown'?1:-1)));render();return;}
+  if(S.palette&&e.key==='Enter'){const on=document.querySelector('.pitem.on');if(on)on.click();return;}
+  if(e.key==='Enter'&&e.target.id==='search'&&S.query){S.screen='discover';$('#suggest').classList.remove('show');render();return;}
+  if(e.key==='Escape'){
+    if(S.onboard){S.onboard=0;}            // Esc 等同跳过引导，写入完成标记
+    else if(S.fmenu){S.fmenu=false;}
+    else if(S.palette||S.sheet||S.settings){S.palette=false;S.sheet='';S.settings=false;}
+    else if(islOpen())S.isl=S.isl==='summary'?'none':'run';
+    render(); }
+});
+addEventListener('resize',fit);
+render();
+</script>
+</body>
+</html>

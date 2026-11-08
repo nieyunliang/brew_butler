@@ -1,0 +1,2721 @@
+{
+  "findings": [
+    {
+      "formula": "libheif",
+      "version": "1.22.2",
+      "tag": "v1.22.2",
+      "repo_url": "https://github.com/strukturag/libheif",
+      "vulnerabilities": [
+        {
+          "id": "CVE-2026-50142",
+          "severity": "HIGH",
+          "summary": "libheif: unbounded heap allocation in HEIF sequence parser (stsz fixed-size mode missing bound check)",
+          "aliases": [
+            "GHSA-jvmp-j3cw-84mh"
+          ],
+          "fixed_versions": [
+            "bd114ed6d592adc92a09882172ab71d1b4c6e1b1",
+            "a6caa38f7a70d66dc9caec2a7bfe20935b32c622"
+          ]
+        },
+        {
+          "id": "CVE-2026-62289",
+          "severity": "MEDIUM",
+          "summary": "libheif: Integer underflow in Fraction constructor via double clap transform application",
+          "aliases": [
+            "GHSA-jc8f-p23p-5hjg"
+          ],
+          "fixed_versions": [
+            "2c4bbb54c2738d4a5efbbe3e5fa1d5d76bb88eb0",
+            "f01870c1d7323a3003796d58eba7fff502be994c"
+          ]
+        },
+        {
+          "id": "CVE-2026-62291",
+          "severity": "MEDIUM",
+          "summary": "libheif: Heap out of bounds write in libheif uncompressed encoder when writing images with mismatched auxiliary alpha dimensions",
+          "aliases": [
+            "GHSA-xpw3-9rhw-482x"
+          ],
+          "fixed_versions": [
+            "2c4bbb54c2738d4a5efbbe3e5fa1d5d76bb88eb0",
+            "ac5521ad50399885de96bb6a0733a5d2442740f9"
+          ]
+        },
+        {
+          "id": "CVE-2026-62292",
+          "severity": "UNKNOWN",
+          "summary": "libheif: Out-of-bounds read in uncompressed unci tile range slicing",
+          "aliases": [
+            "GHSA-73p7-m7gg-w2jv"
+          ],
+          "fixed_versions": [
+            "2c4bbb54c2738d4a5efbbe3e5fa1d5d76bb88eb0",
+            "089a809bf6bed1abae102d5e97b6bb8c4f53b515"
+          ]
+        },
+        {
+          "id": "CVE-2026-62377",
+          "severity": "MEDIUM",
+          "summary": "libheif: Reachable assertion in HeifContext::get_track() aborts on a valid-but-empty HEIF sequence file (context.cc:2110)",
+          "aliases": [
+            "GHSA-9ww4-9v47-m7pj"
+          ],
+          "fixed_versions": [
+            "2c4bbb54c2738d4a5efbbe3e5fa1d5d76bb88eb0",
+            "e1a0bc1c1ae74f8075eaca30a1cdb2b9bee698d3"
+          ]
+        },
+        {
+          "id": "CVE-2026-84383",
+          "severity": "CRITICAL",
+          "summary": "libheif: Heap buffer overflow in `scale_nearest_neighbor()` via duplicate Alpha planes from nested `iden`/`auxl` items",
+          "aliases": [
+            "GHSA-g89c-p67h-r497"
+          ],
+          "fixed_versions": [
+            "ac1cb05c39008f01525c991ff8b88f84ddf70fd2",
+            "f4fb8bde4704ebb46e46ff9fb94407c9774153b2"
+          ]
+        },
+        {
+          "id": "CVE-2026-84384",
+          "severity": "HIGH",
+          "summary": "libheif: brotli/zlib decompression paths lack output-size limits, allowing decompression-bomb OOM/DoS",
+          "aliases": [
+            "GHSA-24wx-9w62-c96w"
+          ],
+          "fixed_versions": [
+            "ac1cb05c39008f01525c991ff8b88f84ddf70fd2",
+            "21893e8f66c8b79363ca2809391b07d35e1a95ec"
+          ]
+        },
+        {
+          "id": "CVE-2026-84444",
+          "severity": "HIGH",
+          "summary": "libheif uncompressed tiled image encoding allows out-of-bounds write",
+          "aliases": [
+            "GHSA-j264-xvrp-5v7q"
+          ],
+          "fixed_versions": [
+            "ac1cb05c39008f01525c991ff8b88f84ddf70fd2",
+            "e65071f59a1ac08aa1eb0d07a831deaf6bb4d03b"
+          ]
+        },
+        {
+          "id": "CVE-2026-84446",
+          "severity": "HIGH",
+          "summary": "libheif: Sequence decode timing-table initialization allows non-terminating loops and unbounded memory, bypassing max_sequence_frames",
+          "aliases": [
+            "GHSA-xw34-mjcp-jqh8"
+          ],
+          "fixed_versions": [
+            "ac1cb05c39008f01525c991ff8b88f84ddf70fd2",
+            "3a7a69ae325f652e48c026b8241ab25bedf44d9b"
+          ]
+        },
+        {
+          "id": "CVE-2026-84447",
+          "severity": "HIGH",
+          "summary": "libheif: Derived-image indirect reference chains and tiled offsets bypass decode caching and MemoryHandle limits, causing CPU/memory amplification DoS",
+          "aliases": [
+            "GHSA-x8xm-cm2c-cfc8"
+          ],
+          "fixed_versions": [
+            "ac1cb05c39008f01525c991ff8b88f84ddf70fd2",
+            "30b52a4e829efe0ee6d7208e8500b99f664af5e9"
+          ]
+        },
+        {
+          "id": "CVE-2026-84448",
+          "severity": "MEDIUM",
+          "summary": "libheif: Heap out-of-bounds read in libheif inline-mask region API (heif_region_item_add_region_inline_mask_data / heif_region_get_mask_image)",
+          "aliases": [
+            "GHSA-p58j-h3vm-3fp5"
+          ],
+          "fixed_versions": [
+            "ac1cb05c39008f01525c991ff8b88f84ddf70fd2",
+            "646d85fbf5bd18fc3cdc516e915e59072de2d510"
+          ]
+        },
+        {
+          "id": "CVE-2026-84450",
+          "severity": "MEDIUM",
+          "summary": "libheif: `clap` + oversized `ispe` aborts on an assert in `Fraction::Fraction` (incomplete fix for CVE-2026-62289)",
+          "aliases": [
+            "GHSA-gh5q-69gg-c964"
+          ],
+          "fixed_versions": [
+            "78c9746aea226b22885e8d35241353ce669c4ea5",
+            "1c2df9c0e814f89716f3a4d85a444b2dbc63ad69"
+          ]
+        },
+        {
+          "id": "CVE-2026-84451",
+          "severity": "MEDIUM",
+          "summary": "libheif: Incomplete fix for CVE-2026-62292 leaves libheif vulnerable to an out-of-bounds read",
+          "aliases": [
+            "GHSA-hh47-fhqr-cj2r"
+          ],
+          "fixed_versions": [
+            "78c9746aea226b22885e8d35241353ce669c4ea5",
+            "8bfed9a9ed008e4ef28abc736284a90d3cba754f"
+          ]
+        },
+        {
+          "id": "OSV-2020-2308",
+          "severity": "MEDIUM",
+          "summary": "Heap-buffer-overflow in derive_collocated_motion_vectors",
+          "aliases": [],
+          "fixed_versions": []
+        },
+        {
+          "id": "OSV-2023-1129",
+          "severity": "MEDIUM",
+          "summary": "UNKNOWN READ in HeifPixelImage::overlay",
+          "aliases": [],
+          "fixed_versions": []
+        }
+      ],
+      "patched": []
+    },
+    {
+      "formula": "openjpeg",
+      "version": "2.5.4",
+      "tag": "v2.5.4",
+      "repo_url": "https://github.com/uclouvain/openjpeg",
+      "vulnerabilities": [
+        {
+          "id": "CVE-2026-6192",
+          "severity": "UNKNOWN",
+          "summary": "uclouvain openjpeg pi.c opj_pi_initialise_encode integer overflow",
+          "aliases": [],
+          "fixed_versions": [
+            "839936aa33eb8899bbbd80fda02796bb65068951"
+          ]
+        },
+        {
+          "id": "OSV-2025-219",
+          "severity": "HIGH",
+          "summary": "Heap-buffer-overflow in opj_j2k_read_tile_header",
+          "aliases": [],
+          "fixed_versions": [
+            "d33cbecc148d3affcdf403211fddc2cc5d442379",
+            "91d08b11a72764f6d199f32fa0c1b1abd4edc2ad"
+          ]
+        }
+      ],
+      "patched": []
+    },
+    {
+      "formula": "harfbuzz",
+      "version": "14.2.0",
+      "tag": "14.2.0",
+      "repo_url": "https://github.com/harfbuzz/harfbuzz",
+      "vulnerabilities": [
+        {
+          "id": "CVE-2026-113679",
+          "severity": "UNKNOWN",
+          "summary": "HarfBuzz 8.0.0 through 14.6.0 Out-of-Bounds Write via WebAssembly font_glyph_to_string",
+          "aliases": [],
+          "fixed_versions": [
+            "5e821de8256d01780566b5c8ab7886fae4c93da8"
+          ]
+        },
+        {
+          "id": "CVE-2026-113680",
+          "severity": "UNKNOWN",
+          "summary": "HarfBuzz 8.0.0 through 14.6.0 WebAssembly Shaper NULL Pointer Dereference DoS",
+          "aliases": [],
+          "fixed_versions": [
+            "a71aa86c2bac114fafb6b47f8da02024ecb44fa6"
+          ]
+        },
+        {
+          "id": "OSV-2026-962",
+          "severity": "MEDIUM",
+          "summary": "Use-of-uninitialized-value in iup_delta_optimize",
+          "aliases": [],
+          "fixed_versions": [
+            "6c2107ace765f95c67d65a21f94b54a2f12d80dc"
+          ]
+        }
+      ],
+      "patched": []
+    },
+    {
+      "formula": "libde265",
+      "version": "1.1.0",
+      "tag": "v1.1.0",
+      "repo_url": "https://github.com/strukturag/libde265",
+      "vulnerabilities": [
+        {
+          "id": "CVE-2026-54240",
+          "severity": "HIGH",
+          "summary": "libde265: Pixel accessor signed integer overflow causes heap OOB read/write",
+          "aliases": [
+            "GHSA-ccfw-29x7-rrx3"
+          ],
+          "fixed_versions": [
+            "4dd701fffac01632ffd5cabc5ef10deb56accba1"
+          ]
+        },
+        {
+          "id": "CVE-2026-54241",
+          "severity": "HIGH",
+          "summary": "libde265: SAO sequential filter heap buffer overflow via signed integer overflow",
+          "aliases": [
+            "GHSA-j2qq-x2xq-g9wr"
+          ],
+          "fixed_versions": [
+            "4dd701fffac01632ffd5cabc5ef10deb56accba1"
+          ]
+        },
+        {
+          "id": "CVE-2026-88373",
+          "severity": "HIGH",
+          "summary": null,
+          "aliases": [],
+          "fixed_versions": [
+            "f8d324914e43d92af23614f22959cf9eee7bf9ea"
+          ]
+        }
+      ],
+      "patched": []
+    },
+    {
+      "formula": "graphite2",
+      "version": "1.3.14",
+      "tag": "1.3.14",
+      "repo_url": "https://github.com/silnrsi/graphite",
+      "vulnerabilities": [
+        {
+          "id": "CVE-2026-50593",
+          "severity": "HIGH",
+          "summary": null,
+          "aliases": [],
+          "fixed_versions": [
+            "ca8d821e60a15b6c24e404c9086992c975d8e1cf",
+            "ad78c6b7319909e1540c1b134e115ced03417866"
+          ]
+        }
+      ],
+      "patched": []
+    },
+    {
+      "formula": "tesseract",
+      "version": "5.5.2",
+      "tag": "5.5.2",
+      "repo_url": "https://github.com/tesseract-ocr/tesseract",
+      "vulnerabilities": [
+        {
+          "id": "CVE-2026-73066",
+          "severity": "UNKNOWN",
+          "summary": "Tesseract: Heap out-of-bounds write in LSTM Convolve layer via crafted .traineddata",
+          "aliases": [
+            "GHSA-7j76-5rq5-5jg8"
+          ],
+          "fixed_versions": [
+            "db0ec62f81b0737fbbe184d8fea40af5738f8eef",
+            "2f4d2f4bf45c363785d7bf1da29b6628f8939a72"
+          ]
+        },
+        {
+          "id": "CVE-2026-73067",
+          "severity": "UNKNOWN",
+          "summary": "Tesseract: Heap OOB read in the DAWG loader",
+          "aliases": [
+            "GHSA-x3vq-7rr7-5x3h"
+          ],
+          "fixed_versions": [
+            "db0ec62f81b0737fbbe184d8fea40af5738f8eef",
+            "55287a94b8044c05ce3fd10f5aca6ebbd238e518",
+            "82727cc11c34eaf1249af002d69f6bbae70993b9"
+          ]
+        },
+        {
+          "id": "CVE-2026-88047",
+          "severity": "UNKNOWN",
+          "summary": "Tesseract: ReadNormProtos stack buffer overflow",
+          "aliases": [
+            "GHSA-5j2p-r5vc-q7f3"
+          ],
+          "fixed_versions": [
+            "1bda5079b1c8a7e25f523486837426903d29ce84"
+          ]
+        },
+        {
+          "id": "CVE-2026-88048",
+          "severity": "UNKNOWN",
+          "summary": "Tesseract: Heap out-of-bounds write/read in FullyConnected::Forward via layer/weight-matrix dimension mismatch",
+          "aliases": [
+            "GHSA-q44c-23p6-5mw6"
+          ],
+          "fixed_versions": [
+            "103dc134eb36411ddc6833ec20aa2c76795bd0ff"
+          ]
+        },
+        {
+          "id": "CVE-2026-88049",
+          "severity": "UNKNOWN",
+          "summary": "Tesseract: Heap out-of-bounds write in LSTM::Forward via na_/gate-matrix dimension mismatch",
+          "aliases": [
+            "GHSA-jgq8-pprg-vc68"
+          ],
+          "fixed_versions": [
+            "b494ac18925f9d9aff9ef5815475de9943ab19bf"
+          ]
+        },
+        {
+          "id": "CVE-2026-88050",
+          "severity": "UNKNOWN",
+          "summary": "Tesseract: Out-of-bounds write in UnicharCompress via unvalidated recoder code values",
+          "aliases": [
+            "GHSA-7v9h-3q3m-w68g"
+          ],
+          "fixed_versions": [
+            "c94a5532ee04db5a4919542832fd94caee5ea58f"
+          ]
+        },
+        {
+          "id": "CVE-2026-88051",
+          "severity": "UNKNOWN",
+          "summary": "Tesseract: Heap out-of-bounds write in GenericVector<T>::read due to independent reserved/size_used_ fields",
+          "aliases": [
+            "GHSA-88qp-4g94-3rf3"
+          ],
+          "fixed_versions": [
+            "56e09ca12e751623fe796ce1554ce704bffd2ef0"
+          ]
+        },
+        {
+          "id": "CVE-2026-88052",
+          "severity": "HIGH",
+          "summary": "Tesseract: Heap out-of-bounds write in UNICHARSET::load_via_fgets via count/insert desynchronization",
+          "aliases": [
+            "GHSA-2hm8-q5c7-c373"
+          ],
+          "fixed_versions": [
+            "2d04d640db2e8c7e3bab2369d599343b5a8b8443"
+          ]
+        },
+        {
+          "id": "CVE-2026-88053",
+          "severity": "UNKNOWN",
+          "summary": "Tesseract: Heap out-of-bounds write in Classify::ReadIntTemplates via unvalidated counts in crafted .traineddata",
+          "aliases": [
+            "GHSA-rphx-x795-5qjv"
+          ],
+          "fixed_versions": [
+            "8b0574680f3b22f246ade6a4c8e3029104255c63"
+          ]
+        },
+        {
+          "id": "CVE-2026-88054",
+          "severity": "UNKNOWN",
+          "summary": "Tesseract: Denial of service via empty-stack dereference in Plumbing/Series at model load",
+          "aliases": [
+            "GHSA-f6h7-cqr4-6fx4"
+          ],
+          "fixed_versions": [
+            "552771236b0d80cbdb0c7dd856120fa21a4672e5"
+          ]
+        }
+      ],
+      "patched": []
+    },
+    {
+      "formula": "cairo",
+      "version": "1.18.4",
+      "tag": "1.18.4",
+      "repo_url": "https://gitlab.freedesktop.org/cairo/cairo",
+      "vulnerabilities": [
+        {
+          "id": "OSV-2023-298",
+          "severity": "HIGH",
+          "summary": "UNKNOWN READ in active_edges",
+          "aliases": [],
+          "fixed_versions": [
+            "04656d7450e229622546fd2b11496aa58c44181d"
+          ]
+        }
+      ],
+      "patched": []
+    },
+    {
+      "formula": "openssl@3",
+      "version": "3.6.1",
+      "tag": "openssl-3.6.1",
+      "repo_url": "https://github.com/openssl/openssl",
+      "vulnerabilities": [
+        {
+          "id": "CVE-2026-14456",
+          "severity": "HIGH",
+          "summary": "Unbounded Memory Growth in QUIC Server Incoming Channel Queue",
+          "aliases": [],
+          "fixed_versions": [
+            "f089acdf4bc7ba94a79f4bf6eb7362c3e7d14aa9",
+            "d3c1b1169b3569ff3069e5b399f47b2b28e03d79",
+            "f4dc4d58b48d346a8270183f89acf826d459b0ca",
+            "f2f1465f2d2e5c61dfeac4d20fd093797d821139",
+            "4084152e040329ca0194c4c1750b9b46d00a5b6b",
+            "08e7756c3900bcfd77a720e7b74e27d6e4ed01a9"
+          ]
+        },
+        {
+          "id": "CVE-2026-14457",
+          "severity": "HIGH",
+          "summary": "RPK Server Signature Algorithm Selection Can Dereference a Missing Certificate",
+          "aliases": [],
+          "fixed_versions": [
+            "0c5d912057abf47505b4ad455da49fbab99b76f1",
+            "f4dc4d58b48d346a8270183f89acf826d459b0ca",
+            "d3c1b1169b3569ff3069e5b399f47b2b28e03d79",
+            "f089acdf4bc7ba94a79f4bf6eb7362c3e7d14aa9",
+            "1e8c398db67404babd3e5af999bb6bd86f720c76",
+            "581aaa0f0a35d214740f0fe1f5283ec41f1212e1",
+            "d0af20478688a6aa2f59d61caa3f82136b181d7f",
+            "dad836b071da6579510c968615848ba03cac593b"
+          ]
+        },
+        {
+          "id": "CVE-2026-18798",
+          "severity": "HIGH",
+          "summary": "QUIC Server May Trigger Double Free When Processing INITIAL Packet",
+          "aliases": [],
+          "fixed_versions": [
+            "f4dc4d58b48d346a8270183f89acf826d459b0ca",
+            "d3c1b1169b3569ff3069e5b399f47b2b28e03d79",
+            "f089acdf4bc7ba94a79f4bf6eb7362c3e7d14aa9",
+            "70cebd74d3592f5272945501b58a60374c4e13af",
+            "967582d5037f01a26b6d19beae19af62a1b15c3c",
+            "a14a1deac403522fbeafabcb198503cf6caa7dc4"
+          ]
+        },
+        {
+          "id": "CVE-2026-2673",
+          "severity": "HIGH",
+          "summary": null,
+          "aliases": [],
+          "fixed_versions": [
+            "2157c9d81f7b0bd7dfa25b960e928ec28e8dd63f",
+            "85977e013f32ceb96aa034c0e741adddc1a05e34"
+          ]
+        },
+        {
+          "id": "CVE-2026-28386",
+          "severity": "CRITICAL",
+          "summary": "Out-of-bounds Read in AES-CFB-128 on X86-64 with AVX-512 Support",
+          "aliases": [],
+          "fixed_versions": [
+            "fe686e15d84334b284f883118ed92f64b409b3aa",
+            "61f428a2fc6671ede184a19f71e6e495f0689621"
+          ]
+        },
+        {
+          "id": "CVE-2026-28387",
+          "severity": "HIGH",
+          "summary": "Potential Use-after-free in DANE Client Code",
+          "aliases": [],
+          "fixed_versions": [
+            "e04bd3433fd84e1861bf258ea37928d9845e6a86",
+            "5aada9c299a3b28fc82348f4e2b93805fa0a0e9c",
+            "204165c1550d3aa0f49395af654124cec2bbabf9",
+            "03b8620d6e9b7b4d5701865edb6ad86101fe5517",
+            "286ddeaac037533bbdce65b3c689e3f7ffebf0f6",
+            "fe686e15d84334b284f883118ed92f64b409b3aa",
+            "07e727d304746edb49a98ee8f6ab00256e1f012b",
+            "258a8f63b26995ba357f4326da00e19e29c6acbe",
+            "444958deaf450aea819171f97ae69eaedede42c3",
+            "7a4e08cee62a728d32e60b0de89e6764339df0a7",
+            "ec03fa050b3346997ed9c5fef3d0e16ad7db8177"
+          ]
+        },
+        {
+          "id": "CVE-2026-28388",
+          "severity": "HIGH",
+          "summary": "NULL Pointer Dereference When Processing a Delta CRL",
+          "aliases": [],
+          "fixed_versions": [
+            "e818b74be2170fbe957a07b0da4401c2b694b3b8",
+            "e04bd3433fd84e1861bf258ea37928d9845e6a86",
+            "5aada9c299a3b28fc82348f4e2b93805fa0a0e9c",
+            "204165c1550d3aa0f49395af654124cec2bbabf9",
+            "03b8620d6e9b7b4d5701865edb6ad86101fe5517",
+            "286ddeaac037533bbdce65b3c689e3f7ffebf0f6",
+            "fe686e15d84334b284f883118ed92f64b409b3aa",
+            "59c3b3158553ab53275bbbccca5cb305d591cf2e",
+            "5a0b4930779cd2408880979db765db919da55139",
+            "602542f2c0c2d5edb47128f93eac10b62aeeefb3",
+            "a9d187dd1000130100fa7ab915f8513532cb3bb8",
+            "d3a901e8d9f021f3e67d6cfbc12e768129862726"
+          ]
+        },
+        {
+          "id": "CVE-2026-28389",
+          "severity": "HIGH",
+          "summary": "Possible NULL Dereference When Processing CMS KeyAgreeRecipientInfo",
+          "aliases": [],
+          "fixed_versions": [
+            "e818b74be2170fbe957a07b0da4401c2b694b3b8",
+            "e04bd3433fd84e1861bf258ea37928d9845e6a86",
+            "5aada9c299a3b28fc82348f4e2b93805fa0a0e9c",
+            "204165c1550d3aa0f49395af654124cec2bbabf9",
+            "03b8620d6e9b7b4d5701865edb6ad86101fe5517",
+            "286ddeaac037533bbdce65b3c689e3f7ffebf0f6",
+            "fe686e15d84334b284f883118ed92f64b409b3aa",
+            "16cea4188e0ea567deb4f93f85902247e67384f5",
+            "785cbf7ea3b5a6f5adf0c1ccb92b79d89c35c616",
+            "7b5274e812400cacb6f3be4c2df5340923fa807f",
+            "c6725634e089eb2b634b10ede33944be7248172a",
+            "f80f83bc5fd036bc47d773e8b15a001e2b4ce686"
+          ]
+        },
+        {
+          "id": "CVE-2026-28390",
+          "severity": "HIGH",
+          "summary": "Possible NULL Dereference When Processing CMS KeyTransportRecipientInfo",
+          "aliases": [],
+          "fixed_versions": [
+            "e818b74be2170fbe957a07b0da4401c2b694b3b8",
+            "e04bd3433fd84e1861bf258ea37928d9845e6a86",
+            "5aada9c299a3b28fc82348f4e2b93805fa0a0e9c",
+            "204165c1550d3aa0f49395af654124cec2bbabf9",
+            "03b8620d6e9b7b4d5701865edb6ad86101fe5517",
+            "286ddeaac037533bbdce65b3c689e3f7ffebf0f6",
+            "fe686e15d84334b284f883118ed92f64b409b3aa",
+            "01194a8f1941115cd0383bfa91c736dd3993c8bc",
+            "2e39b7a6993be445fddb9fbce316fa756e0397b6",
+            "af2a5fecd3e71a29e7568f9c1453dec5cebbaff4",
+            "ea7b4ea4f9f853521ba34830cbcadc970d2e0788",
+            "fd2f1a6cf53b9ceeca723a001aa4b825d7c7ee75"
+          ]
+        },
+        {
+          "id": "CVE-2026-31789",
+          "severity": "MEDIUM",
+          "summary": "Heap Buffer Overflow in Hexadecimal Conversion",
+          "aliases": [],
+          "fixed_versions": [
+            "5aada9c299a3b28fc82348f4e2b93805fa0a0e9c",
+            "204165c1550d3aa0f49395af654124cec2bbabf9",
+            "03b8620d6e9b7b4d5701865edb6ad86101fe5517",
+            "286ddeaac037533bbdce65b3c689e3f7ffebf0f6",
+            "fe686e15d84334b284f883118ed92f64b409b3aa",
+            "364f095b80601db632b0def6a33316967f863bde",
+            "7a9087efd769f362ad9c0e30c7baaa6bbfa65ecf",
+            "945b935ac66cc7f1a41f1b849c7c25adb5351f49",
+            "a24216018e1ede8ff01a4ff5afff7dfbd443e2f9",
+            "a91e537d16d74050dbde50bb0dfb1fe9930f0521"
+          ]
+        },
+        {
+          "id": "CVE-2026-31790",
+          "severity": "HIGH",
+          "summary": "Incorrect Failure Handling in RSA KEM RSASVE Encapsulation",
+          "aliases": [],
+          "fixed_versions": [
+            "5aada9c299a3b28fc82348f4e2b93805fa0a0e9c",
+            "204165c1550d3aa0f49395af654124cec2bbabf9",
+            "03b8620d6e9b7b4d5701865edb6ad86101fe5517",
+            "286ddeaac037533bbdce65b3c689e3f7ffebf0f6",
+            "fe686e15d84334b284f883118ed92f64b409b3aa",
+            "001e01db3e996e13ffc72386fe79d03a6683b5ac",
+            "abd8b2eec7e3f3fda60ecfb68498b246b52af482",
+            "b922e24e5b23ffb9cb9e14cadff23d91e9f7e406",
+            "d5f8e71cd0a54e961d0c3b174348f8308486f790",
+            "eed200f58cd8645ed77e46b7e9f764e284df379e"
+          ]
+        },
+        {
+          "id": "CVE-2026-34180",
+          "severity": "HIGH",
+          "summary": "Heap Buffer Over-read in ASN.1 Content Parsing",
+          "aliases": [],
+          "fixed_versions": [
+            "e818b74be2170fbe957a07b0da4401c2b694b3b8",
+            "e04bd3433fd84e1861bf258ea37928d9845e6a86",
+            "51ea949dc1436e865935b47874b21a3bb31a102e",
+            "c5ea1cc227fd60afae8ac4b9438690bbe4888f79",
+            "8cf17aaeb4599f8af87fefd810b5b5fee90fe69e",
+            "aae016bfd52fcad2bc9657c2c782cfdf73b1ed5f",
+            "1c6908e4fa5fa568752221d8eaf561a809751e5d",
+            "cbe418ae978539cf14a398a207dba834c0e93e83",
+            "d93853c42110d6319e3df07842b488cb9f7ac5ff",
+            "da5d62af75f69d6fbf7803743d7c56ac75461e43",
+            "f696c73c3e61b8c502d040af62e690c060908a16"
+          ]
+        },
+        {
+          "id": "CVE-2026-34181",
+          "severity": "HIGH",
+          "summary": "PKCS#12 Files with PBMAC1 Are Accepted with Short HMAC Keys",
+          "aliases": [],
+          "fixed_versions": [
+            "c5ea1cc227fd60afae8ac4b9438690bbe4888f79",
+            "8cf17aaeb4599f8af87fefd810b5b5fee90fe69e",
+            "aae016bfd52fcad2bc9657c2c782cfdf73b1ed5f",
+            "0300eb9ddce7a0895bf301a4b0c03a9da2313a0f",
+            "79eb76a937e474bb7610a0a3dc57131dc8dc6610",
+            "85dcbb3abaa4878af5c8fbbe11bce708fcf984a7",
+            "ec36f2417c4ddd8cabce4b4a60a3d7a7365f2d81"
+          ]
+        },
+        {
+          "id": "CVE-2026-34182",
+          "severity": "CRITICAL",
+          "summary": "CMS AuthEnvelopedData Processing May Accept Forged Messages",
+          "aliases": [],
+          "fixed_versions": [
+            "51ea949dc1436e865935b47874b21a3bb31a102e",
+            "c5ea1cc227fd60afae8ac4b9438690bbe4888f79",
+            "8cf17aaeb4599f8af87fefd810b5b5fee90fe69e",
+            "aae016bfd52fcad2bc9657c2c782cfdf73b1ed5f",
+            "03c1f4d45fb963aee7d5833390c507cd290182bc",
+            "439ed7d2c0962ce964482727264668bf277c333f",
+            "7947e6a81eb8776802f159fb6762cb7fcf7e34c7",
+            "9fd97f8cfdc2c0be214998de3b2b55c8edf6c7ac",
+            "d2ca86bcd43e4f17d899f347101766b6107676e0"
+          ]
+        },
+        {
+          "id": "CVE-2026-34183",
+          "severity": "HIGH",
+          "summary": "Unbounded Memory Growth in the QUIC PATH_CHALLENGE Handler",
+          "aliases": [],
+          "fixed_versions": [
+            "c5ea1cc227fd60afae8ac4b9438690bbe4888f79",
+            "8cf17aaeb4599f8af87fefd810b5b5fee90fe69e",
+            "aae016bfd52fcad2bc9657c2c782cfdf73b1ed5f",
+            "5b306efb0b3779dfdd0803b4afc9d08c91f11517",
+            "7d06955ebe0ecf8adfd4c1e92018586da47ef9ac",
+            "d2e9efbe4900a373227deb136e8665401404ffac",
+            "fbaa83859c01ad64f497b757aaf51be7d05ed9eb"
+          ]
+        },
+        {
+          "id": "CVE-2026-35188",
+          "severity": "MEDIUM",
+          "summary": "Double-free When Checking OCSP Stapled Response",
+          "aliases": [],
+          "fixed_versions": [
+            "aae016bfd52fcad2bc9657c2c782cfdf73b1ed5f",
+            "131145d25659e8749a9ed1afb383484854cffb78",
+            "78d0154cffda03aaaac63a087cc523a6b35fa8fd"
+          ]
+        },
+        {
+          "id": "CVE-2026-35189",
+          "severity": "MEDIUM",
+          "summary": "Excessive Memory Allocation in Relative CRLDP Processing",
+          "aliases": [],
+          "fixed_versions": [
+            "e818b74be2170fbe957a07b0da4401c2b694b3b8",
+            "e04bd3433fd84e1861bf258ea37928d9845e6a86",
+            "e72c946f6f6d94c8ba5119acb25340b7b6b2073f",
+            "45e844fa2a14ec92d146bd8f5778ac130b6625fb",
+            "c8bd5a57108599ac650bbae77fcabe3109dab2e8",
+            "af1775b60dfa141a4ad762585052cabeb9f37e9e",
+            "2b93c73b2c70ddc4c61c5e4bfaaa6bd71379eb84",
+            "3842516cc15e8b2cf55747011045e77547e71d89",
+            "8e0efc7549b7ff8246d40e585e3fd604f728473f",
+            "c72ae182cac17a82e4246c6ecd4e9c4ec3586ec9"
+          ]
+        },
+        {
+          "id": "CVE-2026-35191",
+          "severity": "LOW",
+          "summary": "QUIC Unvalidated Amplification Credit may be Over Accounted",
+          "aliases": [],
+          "fixed_versions": [
+            "45e844fa2a14ec92d146bd8f5778ac130b6625fb",
+            "c8bd5a57108599ac650bbae77fcabe3109dab2e8",
+            "af1775b60dfa141a4ad762585052cabeb9f37e9e",
+            "0fe4442d4f8ea3af8a174046dae176e0d4717239",
+            "2de4c35fb13fc58f43fd8dc1d261700472ce72e5",
+            "e44292e58b090014232ef75bd400393851b24d1a"
+          ]
+        },
+        {
+          "id": "CVE-2026-42764",
+          "severity": "HIGH",
+          "summary": "NULL Pointer Dereference in QUIC Server Initial Packet Handling",
+          "aliases": [],
+          "fixed_versions": [
+            "8cf17aaeb4599f8af87fefd810b5b5fee90fe69e",
+            "aae016bfd52fcad2bc9657c2c782cfdf73b1ed5f",
+            "5e3ed291b8af0b03d5d3b9e56a1da69a187e9729",
+            "a45a0aba8095682c88ff4fc4a784892b8c6f0677",
+            "bf29a458c1a231eca87e384c62b9c2553fa57a91"
+          ]
+        },
+        {
+          "id": "CVE-2026-42765",
+          "severity": "HIGH",
+          "summary": "NULL Dereference in Certificate Verification with OCSP Checking",
+          "aliases": [],
+          "fixed_versions": [
+            "aae016bfd52fcad2bc9657c2c782cfdf73b1ed5f",
+            "14340b7fa1d444615486bc137014b064e64ec334",
+            "eb345da18ce2216b2f3ade9c2bc23e068487fa97"
+          ]
+        },
+        {
+          "id": "CVE-2026-42766",
+          "severity": "MEDIUM",
+          "summary": "Possible NULL Dereference in Password-Based CMS Decryption",
+          "aliases": [],
+          "fixed_versions": [
+            "e818b74be2170fbe957a07b0da4401c2b694b3b8",
+            "e04bd3433fd84e1861bf258ea37928d9845e6a86",
+            "51ea949dc1436e865935b47874b21a3bb31a102e",
+            "c5ea1cc227fd60afae8ac4b9438690bbe4888f79",
+            "8cf17aaeb4599f8af87fefd810b5b5fee90fe69e",
+            "aae016bfd52fcad2bc9657c2c782cfdf73b1ed5f",
+            "056d06c1918fafbb98c1c85a02e4c47cc4e199ce",
+            "12bc26ffb3a2be728c9b86e1cae277de5b33dfa4",
+            "3ff64913615d648cfbb6a6f1cf5529ae7ea829d7",
+            "ab52d88cb5374876d59aee3c91f9e4ccce2b7ce4",
+            "da26f368732b83e40e9d356fe61c3d3aaab6d2e8"
+          ]
+        },
+        {
+          "id": "CVE-2026-42767",
+          "severity": "MEDIUM",
+          "summary": "NULL Pointer Dereference in CRMF EncryptedValue Decryption",
+          "aliases": [],
+          "fixed_versions": [
+            "51ea949dc1436e865935b47874b21a3bb31a102e",
+            "c5ea1cc227fd60afae8ac4b9438690bbe4888f79",
+            "8cf17aaeb4599f8af87fefd810b5b5fee90fe69e",
+            "aae016bfd52fcad2bc9657c2c782cfdf73b1ed5f",
+            "61a86a8cd73546c9fea916f3d304c1293e05c046",
+            "665d5254083affde9982efca7c41dd01cacc8774",
+            "810b722f772652ad48042bcc7ab07e3414b11d0f",
+            "b90ff3b1bd33b1c18e6a09936d097c2eddef8873",
+            "e6f912907fc2ec82a0fd07aae55172c5e5e3d90d"
+          ]
+        },
+        {
+          "id": "CVE-2026-42768",
+          "severity": "LOW",
+          "summary": "Multi-RecipientInfo Bleichenbacher Oracle in CMS_decrypt() and PKCS7_decrypt()",
+          "aliases": [],
+          "fixed_versions": [
+            "c5ea1cc227fd60afae8ac4b9438690bbe4888f79",
+            "8cf17aaeb4599f8af87fefd810b5b5fee90fe69e",
+            "aae016bfd52fcad2bc9657c2c782cfdf73b1ed5f",
+            "a2ca7b2d73e0ffc1eae183fe6e1741dac767cb4f",
+            "bbb151a83041705d9d001ed2f9c12f5523e1b54d",
+            "dd68364107a58841c0a2546812518b65d3a23abd",
+            "f04b377be3d821741c86d1f4bf84dee09f3d5c3e"
+          ]
+        },
+        {
+          "id": "CVE-2026-42769",
+          "severity": "MEDIUM",
+          "summary": "Trust-Anchor Substitution via cert/issuer Typo in CMP rootCaKeyUpdate",
+          "aliases": [],
+          "fixed_versions": [
+            "c5ea1cc227fd60afae8ac4b9438690bbe4888f79",
+            "8cf17aaeb4599f8af87fefd810b5b5fee90fe69e",
+            "aae016bfd52fcad2bc9657c2c782cfdf73b1ed5f",
+            "54d0989997e5fc26057009a9782c3441ce3842fb",
+            "777b363b16fcf2153bb3ded39dc3838713667c44",
+            "d35cd473a271bf3ce7bf3d32af53217fb83ae92c",
+            "d531f21c0fe99067a66fc0ff1161ef127f9cd70b"
+          ]
+        },
+        {
+          "id": "CVE-2026-42770",
+          "severity": "LOW",
+          "summary": "FFC-DH Peer Validation Uses Attacker-Supplied q",
+          "aliases": [],
+          "fixed_versions": [
+            "51ea949dc1436e865935b47874b21a3bb31a102e",
+            "c5ea1cc227fd60afae8ac4b9438690bbe4888f79",
+            "8cf17aaeb4599f8af87fefd810b5b5fee90fe69e",
+            "aae016bfd52fcad2bc9657c2c782cfdf73b1ed5f",
+            "3da5a516cd2635a320ff748503db2cef7c4b0f02",
+            "3ddbb7ab50bd93dfc59cbe08e269a67605aeebdb",
+            "5f452bba2c681423d8fcffd120a19b757ee42e3c",
+            "7fbfde7677ed8808828bf00ff01c937ca04bdda2",
+            "ca2237ab5615641b662183b077f62c08d75e8070"
+          ]
+        },
+        {
+          "id": "CVE-2026-42772",
+          "severity": "MEDIUM",
+          "summary": "Potential CPU DoS via O(n^2) Fragment Reassembly in QUIC",
+          "aliases": [],
+          "fixed_versions": [
+            "e72c946f6f6d94c8ba5119acb25340b7b6b2073f",
+            "45e844fa2a14ec92d146bd8f5778ac130b6625fb",
+            "c8bd5a57108599ac650bbae77fcabe3109dab2e8",
+            "af1775b60dfa141a4ad762585052cabeb9f37e9e",
+            "32d0ed8afe1b8c3e7ece725b44663da3d7087a09",
+            "ca8402e273af4de5b3f04fa61a0f0c02ce3ae20e",
+            "eb2becc0a4baea7f3050a247834d0e5c2ebe1773",
+            "f42ae513bbda513b3c121d54834040ee4a0eae1a"
+          ]
+        },
+        {
+          "id": "CVE-2026-45445",
+          "severity": "HIGH",
+          "summary": "AES-OCB IV Ignored on EVP_Cipher() Path",
+          "aliases": [],
+          "fixed_versions": [
+            "51ea949dc1436e865935b47874b21a3bb31a102e",
+            "c5ea1cc227fd60afae8ac4b9438690bbe4888f79",
+            "8cf17aaeb4599f8af87fefd810b5b5fee90fe69e",
+            "aae016bfd52fcad2bc9657c2c782cfdf73b1ed5f",
+            "323f0b6e7d530a4cb4336d50c88cb70f3ac2a451",
+            "787a6dfba81b7b09c1e05ab31396c0cd7c36b3f7",
+            "7ac4715234ee72d9f3c93426a2c08554b5b771af",
+            "843c9b94ca9c2ed248bb30127bb4f3d7af0d607c",
+            "983d54b5cce8d16147548ed1a37892d1720bbab6"
+          ]
+        },
+        {
+          "id": "CVE-2026-45446",
+          "severity": "MEDIUM",
+          "summary": "Incorrect Tag Processing for Empty Messages in AES-GCM-SIV and AES-SIV modes",
+          "aliases": [],
+          "fixed_versions": [
+            "51ea949dc1436e865935b47874b21a3bb31a102e",
+            "c5ea1cc227fd60afae8ac4b9438690bbe4888f79",
+            "8cf17aaeb4599f8af87fefd810b5b5fee90fe69e",
+            "aae016bfd52fcad2bc9657c2c782cfdf73b1ed5f",
+            "25b32cd9d41d2bc01b6abc425bb4baf2c2236fdc",
+            "71e2a5d263518cf5866043bd60ee4994d59e53a3",
+            "7fe3f33a3b3a4c487aa4dcdbc87057f66ffd2b85",
+            "daca0f48e4a69a2892a62262bad59e62a8a76598",
+            "eec5e9bf0d867333b8495e456f5235d225798a68"
+          ]
+        },
+        {
+          "id": "CVE-2026-45447",
+          "severity": "HIGH",
+          "summary": "Heap Use-After-Free in the PKCS7_verify() Function",
+          "aliases": [],
+          "fixed_versions": [
+            "e818b74be2170fbe957a07b0da4401c2b694b3b8",
+            "e04bd3433fd84e1861bf258ea37928d9845e6a86",
+            "51ea949dc1436e865935b47874b21a3bb31a102e",
+            "c5ea1cc227fd60afae8ac4b9438690bbe4888f79",
+            "8cf17aaeb4599f8af87fefd810b5b5fee90fe69e",
+            "aae016bfd52fcad2bc9657c2c782cfdf73b1ed5f",
+            "3aad5eb7af4de4ee0633c30a8541a54d9bbde63c",
+            "7d4a980c62258c5910cc883936e0c8dbab4d75a8",
+            "9dfd688ad2290fc5075cacbc9bf0c9a93eefed54",
+            "a541ae8bfe849a30cc885e8780715c0f488e496c",
+            "c505d7559da5d5f9f2c3913c6883a5562ce7273e"
+          ]
+        },
+        {
+          "id": "CVE-2026-54872",
+          "severity": "LOW",
+          "summary": "Timing Side-Channel in Scalar Multiplication for Non-NIST EC Curves",
+          "aliases": [],
+          "fixed_versions": [
+            "e818b74be2170fbe957a07b0da4401c2b694b3b8",
+            "e04bd3433fd84e1861bf258ea37928d9845e6a86",
+            "e72c946f6f6d94c8ba5119acb25340b7b6b2073f",
+            "45e844fa2a14ec92d146bd8f5778ac130b6625fb",
+            "c8bd5a57108599ac650bbae77fcabe3109dab2e8",
+            "af1775b60dfa141a4ad762585052cabeb9f37e9e",
+            "1a5bee8dc57430a2be69cd1ffe7fec6a62f4f179",
+            "3f7e1363dccec6f7732bb9e9fa471bb6e4aa68cb",
+            "7d83bc7764999dfd91b83b4f0815b45390422afd",
+            "8166827a78aad164a07aa86dea2b425403ced471"
+          ]
+        },
+        {
+          "id": "CVE-2026-54873",
+          "severity": "HIGH",
+          "summary": "QUIC STREAM Fragment Metadata DoS",
+          "aliases": [],
+          "fixed_versions": [
+            "e72c946f6f6d94c8ba5119acb25340b7b6b2073f",
+            "45e844fa2a14ec92d146bd8f5778ac130b6625fb",
+            "c8bd5a57108599ac650bbae77fcabe3109dab2e8",
+            "af1775b60dfa141a4ad762585052cabeb9f37e9e",
+            "1f643b8bc735487b500a1f68a7fb3a22d5e38e23",
+            "279e7ee1392af98785746788168749491c74bd53",
+            "3ea6213e050e938ecbbf8c4eff32bec2736780eb",
+            "7127fb10888b49711c63128a09e524c0d2d5d0b2"
+          ]
+        },
+        {
+          "id": "CVE-2026-54874",
+          "severity": "HIGH",
+          "summary": "Excessive Memory Use Buffering DTLS Records for a Future Epoch",
+          "aliases": [],
+          "fixed_versions": [
+            "e818b74be2170fbe957a07b0da4401c2b694b3b8",
+            "e04bd3433fd84e1861bf258ea37928d9845e6a86",
+            "a279090b9cd6b682a5a178410765a63e619fa2d9",
+            "0c5d912057abf47505b4ad455da49fbab99b76f1",
+            "f4dc4d58b48d346a8270183f89acf826d459b0ca",
+            "d3c1b1169b3569ff3069e5b399f47b2b28e03d79",
+            "f089acdf4bc7ba94a79f4bf6eb7362c3e7d14aa9",
+            "4808b5d64176451f3d93d87d0ac9c81a9b13fb23",
+            "7110cb2f75806d0bf809eb2f90790d477900be40",
+            "a0c8ec557d9cac078f032d76cdf684fe743eb382",
+            "cc0c6710917cd5eec001b297355d2ba723505107",
+            "f52ffc11b90737ac89083909618dc2e1f42c561c"
+          ]
+        },
+        {
+          "id": "CVE-2026-54875",
+          "severity": "LOW",
+          "summary": "Non-Constant-Time SM2 Scalar Multiplication on ARM64 and RISC-V",
+          "aliases": [],
+          "fixed_versions": [
+            "e72c946f6f6d94c8ba5119acb25340b7b6b2073f",
+            "45e844fa2a14ec92d146bd8f5778ac130b6625fb",
+            "c8bd5a57108599ac650bbae77fcabe3109dab2e8",
+            "af1775b60dfa141a4ad762585052cabeb9f37e9e",
+            "3f01bbc28f7e08211fcdc797fd43816504f94257",
+            "469f3e42629f4a0b5631796e20c66c92c138a3e8",
+            "9794ed473764839275cb701b4850f3c24d929c28",
+            "dddad955d5ff3e9507619cf4e0f13e9988e2197c"
+          ]
+        },
+        {
+          "id": "CVE-2026-54876",
+          "severity": "HIGH",
+          "summary": "Client-Side Memory Leak in OCSP Response Checking",
+          "aliases": [],
+          "fixed_versions": [
+            "f089acdf4bc7ba94a79f4bf6eb7362c3e7d14aa9",
+            "d3c1b1169b3569ff3069e5b399f47b2b28e03d79",
+            "d8c51048ac037a21bae0f41cad7a3920dc7f3638",
+            "155b5fe0f93365e6df1c56ee3606b121080c6c12"
+          ]
+        },
+        {
+          "id": "CVE-2026-63072",
+          "severity": "HIGH",
+          "summary": "Heap Buffer Overflow in CMS Key Unwrapping",
+          "aliases": [],
+          "fixed_versions": [
+            "a279090b9cd6b682a5a178410765a63e619fa2d9",
+            "0c5d912057abf47505b4ad455da49fbab99b76f1",
+            "f4dc4d58b48d346a8270183f89acf826d459b0ca",
+            "d3c1b1169b3569ff3069e5b399f47b2b28e03d79",
+            "f089acdf4bc7ba94a79f4bf6eb7362c3e7d14aa9",
+            "2a3dac874c8057c1f0186849bf1ede1ae7b6b756",
+            "87784ad619af36b8807c2044b3940006fccc1e42",
+            "9530a5fd1aacaeccdced4478ea2340a480613335",
+            "9ec2f6d2ae2bcad907cf7ee38584855bafe4979a",
+            "a0c8ec557d9cac078f032d76cdf684fe743eb382"
+          ]
+        },
+        {
+          "id": "CVE-2026-63073",
+          "severity": "CRITICAL",
+          "summary": "Untrusted Sender DN Used as Format String in CMP Response Validation",
+          "aliases": [],
+          "fixed_versions": [
+            "0c5d912057abf47505b4ad455da49fbab99b76f1",
+            "f4dc4d58b48d346a8270183f89acf826d459b0ca",
+            "d3c1b1169b3569ff3069e5b399f47b2b28e03d79",
+            "f089acdf4bc7ba94a79f4bf6eb7362c3e7d14aa9",
+            "0cc20b322639919aa423e90799d9a57c3b4b76ca",
+            "6a0acc072b4d37a7cac1252a29c1ce1f00c5ec29",
+            "7eb2e3ec9d1d4f35c8022fccd4b03398b3f33e21",
+            "a7e5a6eea8fd3ccca6b6fbba031a5fbf8a3d93b4"
+          ]
+        },
+        {
+          "id": "CVE-2026-63074",
+          "severity": "MEDIUM",
+          "summary": "CMP Indefinite Cache Growth of ExtraCerts",
+          "aliases": [],
+          "fixed_versions": [
+            "a279090b9cd6b682a5a178410765a63e619fa2d9",
+            "0c5d912057abf47505b4ad455da49fbab99b76f1",
+            "f4dc4d58b48d346a8270183f89acf826d459b0ca",
+            "d3c1b1169b3569ff3069e5b399f47b2b28e03d79",
+            "f089acdf4bc7ba94a79f4bf6eb7362c3e7d14aa9",
+            "01e567978a55fba18142a230380c31296049fae7",
+            "21a5d9658b0c66daace60e10ea18ff32a448de9f",
+            "74ae7f6df47a5767c1010b88c47507dfc5b32c46",
+            "75360af9650d4e0c82ba0050c5c9912cd79e54af",
+            "f636f9ca0fa1bae5b42f9e787f025c96fb09c43a"
+          ]
+        },
+        {
+          "id": "CVE-2026-63075",
+          "severity": "HIGH",
+          "summary": "QUIC ACK-only Packet Retention Can Cause Memory Exhaustion",
+          "aliases": [],
+          "fixed_versions": [
+            "0c5d912057abf47505b4ad455da49fbab99b76f1",
+            "f4dc4d58b48d346a8270183f89acf826d459b0ca",
+            "d3c1b1169b3569ff3069e5b399f47b2b28e03d79",
+            "f089acdf4bc7ba94a79f4bf6eb7362c3e7d14aa9",
+            "7308946576b12e64b8be53bcf0a120354b2b42bc",
+            "7c98d79738549df92868e7dd9be4bbf061eed709",
+            "bf84721c2548351176e367e6de505792f0118dc6",
+            "c902e5f16d6a9e130e96d3ca6d8f64d71652e393"
+          ]
+        },
+        {
+          "id": "CVE-2026-63076",
+          "severity": "HIGH",
+          "summary": "Invalid Pointer Dereference in CMP Server via Crafted protectionAlg",
+          "aliases": [],
+          "fixed_versions": [
+            "a279090b9cd6b682a5a178410765a63e619fa2d9",
+            "0c5d912057abf47505b4ad455da49fbab99b76f1",
+            "f4dc4d58b48d346a8270183f89acf826d459b0ca",
+            "d3c1b1169b3569ff3069e5b399f47b2b28e03d79",
+            "f089acdf4bc7ba94a79f4bf6eb7362c3e7d14aa9",
+            "37882aa2e0256e1072442a8f62f7db45b995c45b",
+            "a17cc8d612ecff6d94a9b7ca8b5283ddf5ff570e",
+            "a1f348ccb328c3afbd4ba6883f9b7c813c043259"
+          ]
+        },
+        {
+          "id": "CVE-2026-72897",
+          "severity": "HIGH",
+          "summary": "Out-of-Bounds Access After SSL_set_SSL_CTX() During a Handshake",
+          "aliases": [],
+          "fixed_versions": [
+            "e72c946f6f6d94c8ba5119acb25340b7b6b2073f",
+            "45e844fa2a14ec92d146bd8f5778ac130b6625fb",
+            "c8bd5a57108599ac650bbae77fcabe3109dab2e8",
+            "af1775b60dfa141a4ad762585052cabeb9f37e9e",
+            "00646e5085a0d12d29e0d2f9b9bc5f7111a50922",
+            "4135f553c9d3ba4a09fe752f5d30af2a6a092b2e",
+            "9c54d209486f6b1ad79fe2179c40f13200fa4f61",
+            "e87ed26b298a74d8ba61a53e9c7bcd1acac6b814"
+          ]
+        },
+        {
+          "id": "CVE-2026-7383",
+          "severity": "HIGH",
+          "summary": "Possible Heap Buffer Overflow in ASN.1 Multibyte String Conversion",
+          "aliases": [],
+          "fixed_versions": [
+            "e818b74be2170fbe957a07b0da4401c2b694b3b8",
+            "e04bd3433fd84e1861bf258ea37928d9845e6a86",
+            "51ea949dc1436e865935b47874b21a3bb31a102e",
+            "c5ea1cc227fd60afae8ac4b9438690bbe4888f79",
+            "8cf17aaeb4599f8af87fefd810b5b5fee90fe69e",
+            "aae016bfd52fcad2bc9657c2c782cfdf73b1ed5f",
+            "4f8d2bddaa2c8e06f9c33390ee1717059a6e4be6",
+            "80c15faaf78042bbb8654a0e234c50c381732f74",
+            "bd17511070fb39a67bfa19682affb765e706a974",
+            "c332adaced43bcbb85f97410597e951c11ec3083",
+            "d32350ae8ef7426718f5aa9e383d4b51398ee255"
+          ]
+        },
+        {
+          "id": "CVE-2026-75803",
+          "severity": "CRITICAL",
+          "summary": "AEAD Forgeries with Empty Ciphertext When Using EVP_Cipher()",
+          "aliases": [],
+          "fixed_versions": [
+            "a279090b9cd6b682a5a178410765a63e619fa2d9",
+            "0c5d912057abf47505b4ad455da49fbab99b76f1",
+            "f4dc4d58b48d346a8270183f89acf826d459b0ca",
+            "d3c1b1169b3569ff3069e5b399f47b2b28e03d79",
+            "f089acdf4bc7ba94a79f4bf6eb7362c3e7d14aa9",
+            "119ab9555dc62275bbd71f6f49529b1a44feba42",
+            "3621257986e27e540bf96a11570929a6e5a9e05b",
+            "6c7aa6f8f6449b7fe0137ee8be65fcd239bd7d6a",
+            "bdeb0cd994d915342787f117ee75044f0dc36f34",
+            "bf95f5f772e9362f87b25cfa2f8cb15d984865b9"
+          ]
+        },
+        {
+          "id": "CVE-2026-75804",
+          "severity": "MEDIUM",
+          "summary": "QUIC Connection-Level Flow Control is Not Enforced for Streams",
+          "aliases": [],
+          "fixed_versions": [
+            "e72c946f6f6d94c8ba5119acb25340b7b6b2073f",
+            "45e844fa2a14ec92d146bd8f5778ac130b6625fb",
+            "c8bd5a57108599ac650bbae77fcabe3109dab2e8",
+            "af1775b60dfa141a4ad762585052cabeb9f37e9e",
+            "2e8f54666b3fb7b05ff5f58aa6cac9285163654e",
+            "4533ee8a5686c953ed3b644738ac4bdf20806538",
+            "64d3102fb5b54311e92517f26ba00169d719e74a",
+            "f9eaecf5bdd6692da052bc65b0332af2a938ac03"
+          ]
+        },
+        {
+          "id": "CVE-2026-75805",
+          "severity": "MEDIUM",
+          "summary": "NULL Pointer Dereference in CMP Client Revocation Response Handling",
+          "aliases": [],
+          "fixed_versions": [
+            "e72c946f6f6d94c8ba5119acb25340b7b6b2073f",
+            "45e844fa2a14ec92d146bd8f5778ac130b6625fb",
+            "c8bd5a57108599ac650bbae77fcabe3109dab2e8",
+            "af1775b60dfa141a4ad762585052cabeb9f37e9e",
+            "7588db7fef14209c3caa3a101d11a02006b19166",
+            "7ca0ccb5172a577e9b87267d77bfe21e5481a5e7",
+            "9eb2a8a9b86136cdb39d6d7d50644dd66941cdc3",
+            "abf02872a4b71767ecc72293424420f5b009190f"
+          ]
+        },
+        {
+          "id": "CVE-2026-75806",
+          "severity": "MEDIUM",
+          "summary": "Unauthenticated and Undersized DTLS 1.2 AEAD Record Causes DoS",
+          "aliases": [],
+          "fixed_versions": [
+            "e04bd3433fd84e1861bf258ea37928d9845e6a86",
+            "e72c946f6f6d94c8ba5119acb25340b7b6b2073f",
+            "45e844fa2a14ec92d146bd8f5778ac130b6625fb",
+            "c8bd5a57108599ac650bbae77fcabe3109dab2e8",
+            "af1775b60dfa141a4ad762585052cabeb9f37e9e",
+            "04728a289a823e68137f88da016cb9ede307217d",
+            "050b275cd671a6eed1d6457642d41a5a77aab972",
+            "3a4589d015a9049d47b66f186cf50a8711343a1d",
+            "5af82fefbaf2b5fec2fc0e1d87f112844902f01d"
+          ]
+        },
+        {
+          "id": "CVE-2026-77696",
+          "severity": "LOW",
+          "summary": "Timing Side-Channel in SM2 Signature Generation",
+          "aliases": [],
+          "fixed_versions": [
+            "e04bd3433fd84e1861bf258ea37928d9845e6a86",
+            "e72c946f6f6d94c8ba5119acb25340b7b6b2073f",
+            "45e844fa2a14ec92d146bd8f5778ac130b6625fb",
+            "c8bd5a57108599ac650bbae77fcabe3109dab2e8",
+            "af1775b60dfa141a4ad762585052cabeb9f37e9e",
+            "1c4aed808a7aea32d2d013049c2e0d9fef164fc9",
+            "20b20628d39b2dcc4677194bd68c7c060fa598cb",
+            "419f5cb519721dceed393dbc524d79e487c72e64",
+            "6b90445a56b99a328ac1feba058abf976504f440"
+          ]
+        },
+        {
+          "id": "CVE-2026-84782",
+          "severity": "HIGH",
+          "summary": "DTLS Retransmits Handshake Messages From a Stale Buffer Offset",
+          "aliases": [],
+          "fixed_versions": [
+            "e818b74be2170fbe957a07b0da4401c2b694b3b8",
+            "e04bd3433fd84e1861bf258ea37928d9845e6a86",
+            "e72c946f6f6d94c8ba5119acb25340b7b6b2073f",
+            "45e844fa2a14ec92d146bd8f5778ac130b6625fb",
+            "c8bd5a57108599ac650bbae77fcabe3109dab2e8",
+            "af1775b60dfa141a4ad762585052cabeb9f37e9e",
+            "906cf0ef1c85ca40ce69163e9086d6d3fe292943",
+            "9f6b34422af7eb5dac61322e33dac1ae989fa628",
+            "a383dafdd754eb5b22bf45e37e1bff9d07277a58",
+            "d951e02ede8f6a6ff8150546db44b34f0518192c"
+          ]
+        },
+        {
+          "id": "CVE-2026-84784",
+          "severity": "HIGH",
+          "summary": "QUIC: Unbounded RETIRE_CONNECTION_ID Backlog",
+          "aliases": [],
+          "fixed_versions": [
+            "e72c946f6f6d94c8ba5119acb25340b7b6b2073f",
+            "45e844fa2a14ec92d146bd8f5778ac130b6625fb",
+            "c8bd5a57108599ac650bbae77fcabe3109dab2e8",
+            "af1775b60dfa141a4ad762585052cabeb9f37e9e",
+            "4685c914b0d410b1034f40b547c95bc95e7a380a",
+            "9a30fe0fba195c14e5b87bf93c0d0fdb70373806",
+            "dba3c48d653c64fcbc9070a17a0ee2b3e2f3af1f",
+            "e9e5155833fa968bee50024bf9ca3a185ab599fe"
+          ]
+        },
+        {
+          "id": "CVE-2026-9076",
+          "severity": "HIGH",
+          "summary": "Out-of-Bounds Read in CMS Password-Based Decryption",
+          "aliases": [],
+          "fixed_versions": [
+            "e818b74be2170fbe957a07b0da4401c2b694b3b8",
+            "e04bd3433fd84e1861bf258ea37928d9845e6a86",
+            "51ea949dc1436e865935b47874b21a3bb31a102e",
+            "c5ea1cc227fd60afae8ac4b9438690bbe4888f79",
+            "8cf17aaeb4599f8af87fefd810b5b5fee90fe69e",
+            "aae016bfd52fcad2bc9657c2c782cfdf73b1ed5f",
+            "05b066366842f930fadd9a6e94df98030af431bb",
+            "3d8d5bc1056b2f62da9fede23fedbf47e85187b0",
+            "715349a1d7c6db970e6815dafb90915f07307f98",
+            "77bf00ab13f6ff5e516535432f0328ed70ec0c26",
+            "eecbe330977e8d023aae1ca2d9bdbe983ef3fdc6"
+          ]
+        }
+      ],
+      "patched": []
+    },
+    {
+      "formula": "librsvg",
+      "version": "2.62.2",
+      "tag": "2.62.2",
+      "repo_url": "https://gitlab.gnome.org/GNOME/librsvg",
+      "vulnerabilities": [
+        {
+          "id": "OSV-2025-202",
+          "severity": "MEDIUM",
+          "summary": "UNKNOWN READ in _blit_xrgb32_lerp_spans",
+          "aliases": [],
+          "fixed_versions": []
+        }
+      ],
+      "patched": []
+    },
+    {
+      "formula": "jbig2dec",
+      "version": "0.20",
+      "tag": "0.20",
+      "repo_url": "https://github.com/artifexsoftware/jbig2dec",
+      "vulnerabilities": [
+        {
+          "id": "CVE-2023-46361",
+          "severity": "UNKNOWN",
+          "summary": null,
+          "aliases": [],
+          "fixed_versions": []
+        }
+      ],
+      "patched": []
+    },
+    {
+      "formula": "imagemagick",
+      "version": "7.1.2-24",
+      "tag": "7.1.2-24",
+      "repo_url": "https://github.com/imagemagick/imagemagick",
+      "vulnerabilities": [
+        {
+          "id": "CVE-2026-102635",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-32 and 6.9.13-57 Uninitialized Heap Memory Disclosure in GIF Decoder",
+          "aliases": [
+            "GHSA-rvv7-5mh8-vcfc"
+          ],
+          "fixed_versions": [
+            "ad98b244c995d2e3051757fa3b7855f45b550d24",
+            "a0ca2c739c0216ff4efbd631d1ba7fd54dba1ff4",
+            "5e22284eaf96976b6d3c7c7f45231a813e4cd774",
+            "95dc0fd21a684bfac2bdb6fb6638c0ab271adbe5"
+          ]
+        },
+        {
+          "id": "CVE-2026-105081",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-33 Policy Bypass via Symlink in IsRightsAuthorizedByName",
+          "aliases": [
+            "GHSA-79p5-w6jv-r997"
+          ],
+          "fixed_versions": [
+            "211e5b975a0019a88dcef5f84c1193f46738d815"
+          ]
+        },
+        {
+          "id": "CVE-2026-105083",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-32 and 6.9.13-57 Security Policy Bypass via policy.xml DOCTYPE",
+          "aliases": [
+            "GHSA-jjp4-3fwf-393j"
+          ],
+          "fixed_versions": [
+            "ad98b244c995d2e3051757fa3b7855f45b550d24",
+            "1926ccf119141c26274c120d1899dffae19b0c71",
+            "399d4bd3b081f44c7fef78153f65e8cdebed9f1a",
+            "5e22284eaf96976b6d3c7c7f45231a813e4cd774",
+            "402ebc5353e569234908962cbdf451531ff66a57",
+            "da6022b2efe6cce8a2fd8f9e51188a45a3b9d558"
+          ]
+        },
+        {
+          "id": "CVE-2026-105398",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-31 Heap Buffer Overflow via GetVirtualPixels API",
+          "aliases": [
+            "CVE-2026-106571",
+            "GHSA-jvjm-9f73-fhpq"
+          ],
+          "fixed_versions": [
+            "fb965f1b54a65ddb633f8c2eac4452c782c66d7f"
+          ]
+        },
+        {
+          "id": "CVE-2026-105399",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-31 Denial of Service via MVG Decoder",
+          "aliases": [
+            "CVE-2026-106573",
+            "GHSA-qr53-hc3p-fc62"
+          ],
+          "fixed_versions": [
+            "fb965f1b54a65ddb633f8c2eac4452c782c66d7f"
+          ]
+        },
+        {
+          "id": "CVE-2026-105400",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-31 Unclosed File Pointer via Magick Script",
+          "aliases": [
+            "CVE-2026-106575",
+            "GHSA-2w4h-697j-4vrm"
+          ],
+          "fixed_versions": [
+            "fb965f1b54a65ddb633f8c2eac4452c782c66d7f"
+          ]
+        },
+        {
+          "id": "CVE-2026-105401",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-31 Heap Buffer Overflow in Distributed Pixel Cache Server",
+          "aliases": [
+            "CVE-2026-106574",
+            "GHSA-4fq9-vrx7-gv92"
+          ],
+          "fixed_versions": [
+            "fb965f1b54a65ddb633f8c2eac4452c782c66d7f"
+          ]
+        },
+        {
+          "id": "CVE-2026-105402",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-31 Denial of Service via XMP Profile Parsing",
+          "aliases": [
+            "CVE-2026-106576",
+            "GHSA-v45j-x8p4-3mh4"
+          ],
+          "fixed_versions": [
+            "fb965f1b54a65ddb633f8c2eac4452c782c66d7f"
+          ]
+        },
+        {
+          "id": "CVE-2026-105403",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-31 Security Policy Bypass via Coder Domain",
+          "aliases": [
+            "CVE-2026-106579",
+            "GHSA-vcjj-32hg-qpx5"
+          ],
+          "fixed_versions": [
+            "fb965f1b54a65ddb633f8c2eac4452c782c66d7f"
+          ]
+        },
+        {
+          "id": "CVE-2026-105404",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-31 Code Injection via PostScript Coders",
+          "aliases": [
+            "CVE-2026-106577",
+            "GHSA-5rg6-j44q-q892"
+          ],
+          "fixed_versions": [
+            "fb965f1b54a65ddb633f8c2eac4452c782c66d7f"
+          ]
+        },
+        {
+          "id": "CVE-2026-105405",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-31 Invalid Memory Free in MVG Decoder",
+          "aliases": [
+            "CVE-2026-106578",
+            "GHSA-6xf5-c3jx-rp39"
+          ],
+          "fixed_versions": [
+            "fb965f1b54a65ddb633f8c2eac4452c782c66d7f"
+          ]
+        },
+        {
+          "id": "CVE-2026-105823",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-31 Policy Bypass in CUT Encoder",
+          "aliases": [
+            "CVE-2026-106580",
+            "GHSA-r868-pmwh-fv2c"
+          ],
+          "fixed_versions": [
+            "fb965f1b54a65ddb633f8c2eac4452c782c66d7f"
+          ]
+        },
+        {
+          "id": "CVE-2026-105824",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-30 Use-After-Free in RSVG Decoder Without Cairo",
+          "aliases": [
+            "CVE-2026-107209",
+            "GHSA-f2r2-qw7g-3c8x"
+          ],
+          "fixed_versions": [
+            "344e9056f43764bfdf82456faf3bc2feee98a6fe"
+          ]
+        },
+        {
+          "id": "CVE-2026-105825",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-30 Denial of Service via Crafted XMP Profile",
+          "aliases": [
+            "CVE-2026-107208",
+            "GHSA-27m9-54jx-fgvq"
+          ],
+          "fixed_versions": [
+            "344e9056f43764bfdf82456faf3bc2feee98a6fe"
+          ]
+        },
+        {
+          "id": "CVE-2026-105826",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-30 Security Policy Bypass via MAT Decoder",
+          "aliases": [
+            "CVE-2026-107210",
+            "GHSA-3j4w-pvxj-fpjc"
+          ],
+          "fixed_versions": [
+            "344e9056f43764bfdf82456faf3bc2feee98a6fe"
+          ]
+        },
+        {
+          "id": "CVE-2026-105827",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-30 Stack Overflow in CALS Decoder",
+          "aliases": [
+            "CVE-2026-106572",
+            "GHSA-wxw6-98rj-hjfr"
+          ],
+          "fixed_versions": [
+            "344e9056f43764bfdf82456faf3bc2feee98a6fe"
+          ]
+        },
+        {
+          "id": "CVE-2026-106564",
+          "severity": "MEDIUM",
+          "summary": "ImageMagick: Heap Buffer Over-Write in EXR decoder",
+          "aliases": [
+            "GHSA-54rx-5x9g-g465"
+          ],
+          "fixed_versions": [
+            "ad98b244c995d2e3051757fa3b7855f45b550d24",
+            "f7437ebafcd92d6959eca4086d80b150d52bdb7c"
+          ]
+        },
+        {
+          "id": "CVE-2026-106565",
+          "severity": "MEDIUM",
+          "summary": "ImageMagick: Infinite Loop in bzip2 compressed images.",
+          "aliases": [
+            "GHSA-m9c7-gf3j-hx6h"
+          ],
+          "fixed_versions": [
+            "ad98b244c995d2e3051757fa3b7855f45b550d24",
+            "e9872c4a165d869e75d10799c47195725ebf4132",
+            "5e22284eaf96976b6d3c7c7f45231a813e4cd774",
+            "82f752927a552cbba1213b1d023b85e76845774c"
+          ]
+        },
+        {
+          "id": "CVE-2026-106566",
+          "severity": "MEDIUM",
+          "summary": "ImageMagick: Policy Bypass in delegate symlink cleanup due to missing check",
+          "aliases": [
+            "GHSA-54hm-vrmh-75qj"
+          ],
+          "fixed_versions": [
+            "ad98b244c995d2e3051757fa3b7855f45b550d24",
+            "48e5ce1779fc640a389f0020fd7d965d0c08236e",
+            "5e22284eaf96976b6d3c7c7f45231a813e4cd774",
+            "11d2af00a948e9ca2919d9a8684d335a48484094"
+          ]
+        },
+        {
+          "id": "CVE-2026-106567",
+          "severity": "MEDIUM",
+          "summary": "ImageMagick: Infinite Loop in PSD decoder on 32-bit builds",
+          "aliases": [
+            "GHSA-g6p6-3ggg-3w7j"
+          ],
+          "fixed_versions": [
+            "ad98b244c995d2e3051757fa3b7855f45b550d24",
+            "f053f778409932d55b95758c4b1516b63191d1eb",
+            "5e22284eaf96976b6d3c7c7f45231a813e4cd774",
+            "61024a2677a3c7973a2dd27170877d8e51419473"
+          ]
+        },
+        {
+          "id": "CVE-2026-106568",
+          "severity": "MEDIUM",
+          "summary": "ImageMagick: Infinite Loop when reading a crafted XMP profile",
+          "aliases": [
+            "GHSA-9p7q-63hw-mcr4"
+          ],
+          "fixed_versions": [
+            "ad98b244c995d2e3051757fa3b7855f45b550d24",
+            "e4f7ad983df6c831832eba3689f96b75f8b67051",
+            "5e22284eaf96976b6d3c7c7f45231a813e4cd774",
+            "27e36ca5cb446664bfc284d28d91fced8887b025"
+          ]
+        },
+        {
+          "id": "CVE-2026-106569",
+          "severity": "MEDIUM",
+          "summary": "ImageMagick: Denial of service in ASE decoder because of missing security checks",
+          "aliases": [
+            "GHSA-gwj6-pm7x-3r63"
+          ],
+          "fixed_versions": [
+            "ad98b244c995d2e3051757fa3b7855f45b550d24",
+            "0691546106f4c7e8857da9f21a0e4a8f41915388",
+            "5ecd5b047cee7ccfe4e14a733a0755c7b2a90c7d"
+          ]
+        },
+        {
+          "id": "CVE-2026-106570",
+          "severity": "MEDIUM",
+          "summary": "ImageMagick: Denial of service in distributed pixel cache server",
+          "aliases": [
+            "GHSA-2vwg-3g4g-qprm"
+          ],
+          "fixed_versions": [
+            "ad98b244c995d2e3051757fa3b7855f45b550d24",
+            "cafc7372c8113a9636766f0eddde7b90373c9b44"
+          ]
+        },
+        {
+          "id": "CVE-2026-106571",
+          "severity": "MEDIUM",
+          "summary": "ImageMagick: Heap Buffer Over-Write in GetVirtualPixels api will result in a crash",
+          "aliases": [
+            "CVE-2026-105398",
+            "GHSA-jvjm-9f73-fhpq"
+          ],
+          "fixed_versions": [
+            "fb965f1b54a65ddb633f8c2eac4452c782c66d7f",
+            "8f3a15e60b723bfe3e80bd1b5e4bee88397467f7",
+            "2f16e94c5ecb1256496a20d1ecdcaf53aeb1a4ce",
+            "91f4ed74a1fd8326ade11a1153de110f22d89aa1"
+          ]
+        },
+        {
+          "id": "CVE-2026-106572",
+          "severity": "MEDIUM",
+          "summary": "ImageMagick: Stack Overflown CALS decoder due to missing depth check.",
+          "aliases": [
+            "CVE-2026-105827",
+            "GHSA-wxw6-98rj-hjfr"
+          ],
+          "fixed_versions": [
+            "344e9056f43764bfdf82456faf3bc2feee98a6fe",
+            "19bce64e3667ff03",
+            "96c8a2e0f7d85639d7232bf02632b2edca707df1",
+            "0ca580238abba18910cfee0fcc3159621fec0dee"
+          ]
+        },
+        {
+          "id": "CVE-2026-106573",
+          "severity": "MEDIUM",
+          "summary": "ImageMagick: Denial of service in MVG decoder",
+          "aliases": [
+            "CVE-2026-105399",
+            "GHSA-qr53-hc3p-fc62"
+          ],
+          "fixed_versions": [
+            "fb965f1b54a65ddb633f8c2eac4452c782c66d7f",
+            "c311471c4e4978494834c707b417bc033d95cc48",
+            "2f16e94c5ecb1256496a20d1ecdcaf53aeb1a4ce",
+            "49560a1641f72a127e413b9861eca0997fde2b96"
+          ]
+        },
+        {
+          "id": "CVE-2026-106574",
+          "severity": "MEDIUM",
+          "summary": "ImageMagick: Heap Buffer Over-Write in distributed pixel cache server will result in a crash",
+          "aliases": [
+            "CVE-2026-105401",
+            "GHSA-4fq9-vrx7-gv92"
+          ],
+          "fixed_versions": [
+            "fb965f1b54a65ddb633f8c2eac4452c782c66d7f",
+            "c69f54e1c8660e45f2ff83c354bf924a946d9356"
+          ]
+        },
+        {
+          "id": "CVE-2026-106575",
+          "severity": "MEDIUM",
+          "summary": "ImageMagick: Unclosed file pointer in magick script",
+          "aliases": [
+            "CVE-2026-105400",
+            "GHSA-2w4h-697j-4vrm"
+          ],
+          "fixed_versions": [
+            "fb965f1b54a65ddb633f8c2eac4452c782c66d7f",
+            "86672a16cedbf5a06d64e629e058310d683bb48e"
+          ]
+        },
+        {
+          "id": "CVE-2026-106576",
+          "severity": "MEDIUM",
+          "summary": "ImageMagick: Denial of service possible when parsing an XMP profile.",
+          "aliases": [
+            "CVE-2026-105402",
+            "GHSA-v45j-x8p4-3mh4"
+          ],
+          "fixed_versions": [
+            "fb965f1b54a65ddb633f8c2eac4452c782c66d7f",
+            "f491576297141ff685dc4460d811986f5b6b6cec"
+          ]
+        },
+        {
+          "id": "CVE-2026-106577",
+          "severity": "MEDIUM",
+          "summary": "ImageMagick: Code Injection in the postscript coders",
+          "aliases": [
+            "CVE-2026-105404",
+            "GHSA-5rg6-j44q-q892"
+          ],
+          "fixed_versions": [
+            "fb965f1b54a65ddb633f8c2eac4452c782c66d7f",
+            "2ba2edfd04a1ab3d45af4a0dc1e640dde7020192",
+            "78378cd623468760bee82a5930cb3011725916f8",
+            "2f16e94c5ecb1256496a20d1ecdcaf53aeb1a4ce",
+            "879489740daa44dd72e9405b26c845e8aa3d2f53",
+            "d5750d7309ef5a8cd561430d932a183e4168f484"
+          ]
+        },
+        {
+          "id": "CVE-2026-106578",
+          "severity": "MEDIUM",
+          "summary": "ImageMagick: Invalid Memory Free in MVG decoder",
+          "aliases": [
+            "CVE-2026-105405",
+            "GHSA-6xf5-c3jx-rp39"
+          ],
+          "fixed_versions": [
+            "fb965f1b54a65ddb633f8c2eac4452c782c66d7f",
+            "5d29c094020612dc8fb471b10fc1d1cc6e9e4378",
+            "2f16e94c5ecb1256496a20d1ecdcaf53aeb1a4ce",
+            "bfe0117fd9742b3970383e000978d64e5e04372d"
+          ]
+        },
+        {
+          "id": "CVE-2026-106579",
+          "severity": "MEDIUM",
+          "summary": "ImageMagick: Policy Bypass when using coder as the domain.",
+          "aliases": [
+            "CVE-2026-105403",
+            "GHSA-vcjj-32hg-qpx5"
+          ],
+          "fixed_versions": [
+            "fb965f1b54a65ddb633f8c2eac4452c782c66d7f",
+            "82f373fedb3425c83a239103ab86f4fa86fd49ac",
+            "dcdbbf4278fab20a32a4ad80e64cb95c368ca8dd",
+            "2f16e94c5ecb1256496a20d1ecdcaf53aeb1a4ce",
+            "ac85c8e0a319b1eaf4c3d05d326605f5bae723d6",
+            "c54667bfe605ebdc17c23cb70a26dbe00b338222"
+          ]
+        },
+        {
+          "id": "CVE-2026-106580",
+          "severity": "MEDIUM",
+          "summary": "ImageMagick: Policy Bypass in CUT encoder",
+          "aliases": [
+            "CVE-2026-105823",
+            "GHSA-r868-pmwh-fv2c"
+          ],
+          "fixed_versions": [
+            "fb965f1b54a65ddb633f8c2eac4452c782c66d7f",
+            "768bdd0dbb9a9ad743b6a6e557126b788b325970",
+            "2f16e94c5ecb1256496a20d1ecdcaf53aeb1a4ce",
+            "ad178e41fce2afa6be2b91fb4e7f41c4c5448117"
+          ]
+        },
+        {
+          "id": "CVE-2026-107208",
+          "severity": "MEDIUM",
+          "summary": "ImageMagick: Denial of service with crafted XMP profile",
+          "aliases": [
+            "CVE-2026-105825",
+            "GHSA-27m9-54jx-fgvq"
+          ],
+          "fixed_versions": [
+            "344e9056f43764bfdf82456faf3bc2feee98a6fe",
+            "907b74817836b4f88e7453f0e95c849a1c5311aa",
+            "96c8a2e0f7d85639d7232bf02632b2edca707df1",
+            "6ba345f88a14fcce35c723c231914ae054c4281a"
+          ]
+        },
+        {
+          "id": "CVE-2026-107209",
+          "severity": "MEDIUM",
+          "summary": "ImageMagick: Use-After-Free in RSVG decoder that is build without cairo support",
+          "aliases": [
+            "CVE-2026-105824",
+            "GHSA-f2r2-qw7g-3c8x"
+          ],
+          "fixed_versions": [
+            "344e9056f43764bfdf82456faf3bc2feee98a6fe",
+            "326451aae51ac2dabc99fe66e063de6ec14cf8c8",
+            "96c8a2e0f7d85639d7232bf02632b2edca707df1",
+            "04a4c5b89c034cf2c93bb0a10044332d941b4fa5"
+          ]
+        },
+        {
+          "id": "CVE-2026-107210",
+          "severity": "MEDIUM",
+          "summary": "ImageMagick: Policy Bypass in MAT decoder when reading highly compressed data",
+          "aliases": [
+            "CVE-2026-105826",
+            "GHSA-3j4w-pvxj-fpjc"
+          ],
+          "fixed_versions": [
+            "344e9056f43764bfdf82456faf3bc2feee98a6fe",
+            "ae2ed8c81d8fad1f186e7f2bc0837b46a1c7be61",
+            "96c8a2e0f7d85639d7232bf02632b2edca707df1",
+            "7d8e0eb11804a5ce5322ea317dfd3557cded4e7b"
+          ]
+        },
+        {
+          "id": "CVE-2026-108693",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick through 7.1.2-33 and 6.9.13-58 Uncontrolled Search Path via Ghostscript Delegate",
+          "aliases": [],
+          "fixed_versions": []
+        },
+        {
+          "id": "CVE-2026-109258",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick 7.1.0-20 before 7.1.2-32 Invalid Memory Free in FX Operation",
+          "aliases": [
+            "GHSA-pv8x-gq6w-gp4r"
+          ],
+          "fixed_versions": [
+            "ad98b244c995d2e3051757fa3b7855f45b550d24",
+            "8caa6a0c62a3ac1f81b19a2ee929fbfe46ee0323"
+          ]
+        },
+        {
+          "id": "CVE-2026-109259",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 6.9.13-57 and 7.x before 7.1.2-32 Information Disclosure in TGA Decoder",
+          "aliases": [
+            "GHSA-h499-883p-vph8"
+          ],
+          "fixed_versions": [
+            "ad98b244c995d2e3051757fa3b7855f45b550d24",
+            "df199b79f0a1c87ca009e431f03cb387af160f77",
+            "8e809498fd328256612ee9c0ff7941bd452a0285",
+            "5e22284eaf96976b6d3c7c7f45231a813e4cd774",
+            "9c7c5f9f5fcc9e23f0a8fda830cecfbb3310fbd9"
+          ]
+        },
+        {
+          "id": "CVE-2026-109260",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 6.9.13-57 and 7.x before 7.1.2-32 Memory Leak in PNG Encoder",
+          "aliases": [
+            "GHSA-hvwf-wmm6-hvc3"
+          ],
+          "fixed_versions": [
+            "ad98b244c995d2e3051757fa3b7855f45b550d24",
+            "fd1b9c85f2634e34034d39016ed7542ac0a19930",
+            "5e22284eaf96976b6d3c7c7f45231a813e4cd774",
+            "55346382cebdf5c5fa6c544a7df7ae4910ffb090"
+          ]
+        },
+        {
+          "id": "CVE-2026-109261",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 6.9.13-57 and 7.x before 7.1.2-32 Memory Leak in GIF Encoder",
+          "aliases": [
+            "GHSA-w68r-6fmr-cvg4"
+          ],
+          "fixed_versions": [
+            "ad98b244c995d2e3051757fa3b7855f45b550d24",
+            "1c7763266cfedc635005a965169bc2ddcc650221",
+            "5e22284eaf96976b6d3c7c7f45231a813e4cd774",
+            "93aa075f0fa5a6ae6a83a63acc7c84283aa6d31b"
+          ]
+        },
+        {
+          "id": "CVE-2026-109262",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 6.9.13-57 and 7.x before 7.1.2-32 Memory Leak in SVG Encoder",
+          "aliases": [
+            "GHSA-w288-jj5x-hhvp"
+          ],
+          "fixed_versions": [
+            "ad98b244c995d2e3051757fa3b7855f45b550d24",
+            "2eff6be3785d980bb5190244ad432fe6282d29e3",
+            "5e22284eaf96976b6d3c7c7f45231a813e4cd774",
+            "a568d698ffb3dd57134fef8e9b64b61f1154a1df"
+          ]
+        },
+        {
+          "id": "CVE-2026-109263",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 6.9.13-57 and 7.x before 7.1.2-32 Memory Leak in YUV Encoder",
+          "aliases": [
+            "GHSA-69jx-j2x2-g5w4"
+          ],
+          "fixed_versions": [
+            "ad98b244c995d2e3051757fa3b7855f45b550d24",
+            "493fab0b6072787e929184761b6ab6405a9486a2",
+            "5e22284eaf96976b6d3c7c7f45231a813e4cd774",
+            "3e2075fe4a148ce33e7d749a99898e55a6cad7b5"
+          ]
+        },
+        {
+          "id": "CVE-2026-109264",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 6.9.13-57 and 7.x before 7.1.2-32 Stack Overflow in MVG Decoder",
+          "aliases": [
+            "GHSA-pmqj-84pr-qc7c"
+          ],
+          "fixed_versions": [
+            "ad98b244c995d2e3051757fa3b7855f45b550d24",
+            "6ff963c14ccb5fefb4eb8654c8b0219033df2b20",
+            "5e22284eaf96976b6d3c7c7f45231a813e4cd774",
+            "d4f06dcca7ad99d639af85bc347ad9fdfdcec8e2"
+          ]
+        },
+        {
+          "id": "CVE-2026-109265",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick 7.1.1-7 before 7.1.2-32 Heap Buffer Over-Read via XMP Profile",
+          "aliases": [
+            "GHSA-jph3-37cg-79wg"
+          ],
+          "fixed_versions": [
+            "ad98b244c995d2e3051757fa3b7855f45b550d24",
+            "7605c7619da77a5ff1ccf4ec159f3ec782c6bda7"
+          ]
+        },
+        {
+          "id": "CVE-2026-109266",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 6.9.13-57 and 7.x before 7.1.2-32 Code Injection via CIP Encoder",
+          "aliases": [
+            "GHSA-3429-f84m-8qhw"
+          ],
+          "fixed_versions": [
+            "ad98b244c995d2e3051757fa3b7855f45b550d24",
+            "45bb7328b36c163234f5ccb7f1d494b7c4c8c775",
+            "5e22284eaf96976b6d3c7c7f45231a813e4cd774",
+            "30499e67801ee8a0e70817d28b861b8616d72555"
+          ]
+        },
+        {
+          "id": "CVE-2026-109267",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 6.9.13-57 and 7.x before 7.1.2-32 Stack Overflow in MSL Decoder",
+          "aliases": [
+            "GHSA-462x-739v-qvq2"
+          ],
+          "fixed_versions": [
+            "ad98b244c995d2e3051757fa3b7855f45b550d24",
+            "507aee2308046b25e251d0be1a5371327bb79683",
+            "5e22284eaf96976b6d3c7c7f45231a813e4cd774",
+            "c10823904b251d07fe79346a7136b0af295d451b"
+          ]
+        },
+        {
+          "id": "CVE-2026-109268",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 6.9.13-57 and 7.x before 7.1.2-32 Use After Free in PDF Writer via JPEG2000",
+          "aliases": [
+            "GHSA-j39j-wmxg-j8mv"
+          ],
+          "fixed_versions": [
+            "ad98b244c995d2e3051757fa3b7855f45b550d24",
+            "3285d692ebf200e9cbeff59d1ccc00caab99ad54",
+            "5e22284eaf96976b6d3c7c7f45231a813e4cd774",
+            "966e227a1a8b520ea1652e2eb3ca78b08d3206f5"
+          ]
+        },
+        {
+          "id": "CVE-2026-109269",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 6.9.13-57 and 7.x before 7.1.2-32 Information Disclosure via JPEG Decoder",
+          "aliases": [
+            "GHSA-xxrx-rjp3-27rj"
+          ],
+          "fixed_versions": [
+            "ad98b244c995d2e3051757fa3b7855f45b550d24",
+            "aa104ff2e408bea23828e7a7a346f9080da4104b",
+            "5e22284eaf96976b6d3c7c7f45231a813e4cd774",
+            "acf52477cf05c5ff9c8315d44043589a5190a408"
+          ]
+        },
+        {
+          "id": "CVE-2026-109270",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-32 Memory Leak via -process Option",
+          "aliases": [
+            "GHSA-f32c-2v6j-wvh5"
+          ],
+          "fixed_versions": [
+            "ad98b244c995d2e3051757fa3b7855f45b550d24",
+            "da4cfd78a2ceea4cf54207834f9d60c1b9c38797"
+          ]
+        },
+        {
+          "id": "CVE-2026-109272",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick 7.1.1-31 before 7.1.2-32 Null Pointer Dereference in PostScript Decoder",
+          "aliases": [
+            "GHSA-58h4-rwr6-wj72"
+          ],
+          "fixed_versions": [
+            "ad98b244c995d2e3051757fa3b7855f45b550d24",
+            "d98509b23a547d9ccd0a8af8650d03c5c01c3722"
+          ]
+        },
+        {
+          "id": "CVE-2026-109273",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 6.9.13-57 and 7.x before 7.1.2-32 Information Disclosure in PostScript Decoder",
+          "aliases": [
+            "GHSA-5j8x-vq8c-vrp9"
+          ],
+          "fixed_versions": [
+            "ad98b244c995d2e3051757fa3b7855f45b550d24",
+            "5a5c2e51948fcc5d85b8d832938e2c1b4db4a699",
+            "5e22284eaf96976b6d3c7c7f45231a813e4cd774",
+            "a32215ba7a193f2bc896ba6ed4be4013cc06e22b"
+          ]
+        },
+        {
+          "id": "CVE-2026-109274",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-32 TOCTOU Symlink Race Path Policy Bypass via magick script",
+          "aliases": [
+            "GHSA-7q74-r26w-fwcx"
+          ],
+          "fixed_versions": [
+            "ad98b244c995d2e3051757fa3b7855f45b550d24",
+            "9e789499e67dbf5c4ee9fe1b72690738c799ec73"
+          ]
+        },
+        {
+          "id": "CVE-2026-109275",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 6.9.13-57 and 7.x before 7.1.2-32 Code Injection via MVG Decoder",
+          "aliases": [
+            "GHSA-233r-2p53-wqf5"
+          ],
+          "fixed_versions": [
+            "ad98b244c995d2e3051757fa3b7855f45b550d24",
+            "6cfb8d8c65bb0aba49903589b444f45ea074a226",
+            "5e22284eaf96976b6d3c7c7f45231a813e4cd774",
+            "c9e9c3a84945d698e8c4e849ec858dc914397181"
+          ]
+        },
+        {
+          "id": "CVE-2026-109276",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 6.9.13-57 and 7.x before 7.1.2-32 Temporary File Leak in JNG Decoder",
+          "aliases": [
+            "GHSA-f983-243h-9x4r"
+          ],
+          "fixed_versions": [
+            "ad98b244c995d2e3051757fa3b7855f45b550d24",
+            "b2d579d20cc503185b6e8b0bc2dfb520b7bce58a",
+            "5e22284eaf96976b6d3c7c7f45231a813e4cd774",
+            "3875281ca0c5aa67b2bf0454725abf177c706b3b"
+          ]
+        },
+        {
+          "id": "CVE-2026-109277",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-32 Policy Bypass via -script Operation",
+          "aliases": [
+            "GHSA-vv56-wmgw-m36w"
+          ],
+          "fixed_versions": [
+            "ad98b244c995d2e3051757fa3b7855f45b550d24",
+            "ce92ae07c2ca2c20c131eaf6da6da734c1cafce0"
+          ]
+        },
+        {
+          "id": "CVE-2026-109278",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 6.9.13-57 and 7.x before 7.1.2-32 Memory Leak in Wavelet-Denoise Operation",
+          "aliases": [
+            "GHSA-9f9w-84g3-vp2c"
+          ],
+          "fixed_versions": [
+            "ad98b244c995d2e3051757fa3b7855f45b550d24",
+            "15892fc0dc050a3693e28a214478a8d8488d648c",
+            "5e22284eaf96976b6d3c7c7f45231a813e4cd774",
+            "0d2544e641848462e8b469c06cde69d7d77c35c6"
+          ]
+        },
+        {
+          "id": "CVE-2026-109279",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 6.9.13-57 and 7.x before 7.1.2-32 Heap Buffer Overflow via Concurrent Security Policy Access",
+          "aliases": [
+            "GHSA-8x3v-wr32-qqh4"
+          ],
+          "fixed_versions": [
+            "ad98b244c995d2e3051757fa3b7855f45b550d24",
+            "12db6f04e895deae4537ead10c771a244607794a",
+            "5e22284eaf96976b6d3c7c7f45231a813e4cd774",
+            "9ddc71abea5cbe7d18164fa0f0077a105cab514f"
+          ]
+        },
+        {
+          "id": "CVE-2026-109280",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick 7.1.0-20 before 7.1.2-32 Use After Free via -fx Option",
+          "aliases": [
+            "GHSA-v2x3-wpmg-c4w6"
+          ],
+          "fixed_versions": [
+            "ad98b244c995d2e3051757fa3b7855f45b550d24",
+            "fb743d60700c9bc350c3d2a0b48b998bdabc466c"
+          ]
+        },
+        {
+          "id": "CVE-2026-109281",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick 7.1.0-21 before 7.1.2-32 Heap Buffer Over-Read via -fx Option",
+          "aliases": [
+            "GHSA-cvgp-q487-j22w"
+          ],
+          "fixed_versions": [
+            "ad98b244c995d2e3051757fa3b7855f45b550d24",
+            "0e82a4d0b294581186ed7b3e1dce59c858a73dba"
+          ]
+        },
+        {
+          "id": "CVE-2026-109282",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 6.9.13-57 and 7.x before 7.1.2-32 Undefined Behavior in INFO, JSON and YAML Encoders",
+          "aliases": [
+            "GHSA-8xmr-6q99-c4x8"
+          ],
+          "fixed_versions": [
+            "ad98b244c995d2e3051757fa3b7855f45b550d24",
+            "af7b85012e62fa65393277790b96c56a98d882b6",
+            "5e22284eaf96976b6d3c7c7f45231a813e4cd774",
+            "a17cfd15af1038e3ef179016b41ad88e936b4487"
+          ]
+        },
+        {
+          "id": "CVE-2026-109964",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-33 and 6.9.13-58 Heap Buffer Underwrite in PICT Decoder",
+          "aliases": [
+            "GHSA-mqmp-r5jh-jx7w"
+          ],
+          "fixed_versions": [
+            "211e5b975a0019a88dcef5f84c1193f46738d815",
+            "63dde0cf281383ab69432b88305f7dcd6a8ce900",
+            "164cda3806739d3a42195b72c165b897a6f310d0",
+            "c18c5d5fb7f1d87ddbe0a02e9d1207c89b24588c"
+          ]
+        },
+        {
+          "id": "CVE-2026-53460",
+          "severity": "HIGH",
+          "summary": "ImageMagick: Policy Bypass can trigger out-of-Memory condition",
+          "aliases": [
+            "GHSA-q62c-h75r-2xhc"
+          ],
+          "fixed_versions": [
+            "04a04eaaa22f721f204c4bf4c6b24b08b1afe5c5"
+          ]
+        },
+        {
+          "id": "CVE-2026-53461",
+          "severity": "HIGH",
+          "summary": "ImageMagick: Out-of-bounds write in ICON decoder due to incorrect loop",
+          "aliases": [
+            "GHSA-g22q-f7gc-5jhr"
+          ],
+          "fixed_versions": [
+            "04a04eaaa22f721f204c4bf4c6b24b08b1afe5c5"
+          ]
+        },
+        {
+          "id": "CVE-2026-53462",
+          "severity": "MEDIUM",
+          "summary": "ImageMagick: Use-After-Free when allocation in CheckPrimitiveExtent fails",
+          "aliases": [
+            "GHSA-px7q-ggqj-hcf2"
+          ],
+          "fixed_versions": [
+            "04a04eaaa22f721f204c4bf4c6b24b08b1afe5c5"
+          ]
+        },
+        {
+          "id": "CVE-2026-53463",
+          "severity": "MEDIUM",
+          "summary": "ImageMagick: Null Pointer Dereference in distort operation when passing incorrect arguments",
+          "aliases": [
+            "GHSA-p9rq-q46c-g4x6"
+          ],
+          "fixed_versions": [
+            "04a04eaaa22f721f204c4bf4c6b24b08b1afe5c5"
+          ]
+        },
+        {
+          "id": "CVE-2026-53464",
+          "severity": "MEDIUM",
+          "summary": "ImageMagick: Memory Leak in wand option parser when providing invalid arguments",
+          "aliases": [
+            "GHSA-j989-f892-2335"
+          ],
+          "fixed_versions": [
+            "04a04eaaa22f721f204c4bf4c6b24b08b1afe5c5"
+          ]
+        },
+        {
+          "id": "CVE-2026-53465",
+          "severity": "MEDIUM",
+          "summary": "ImageMagick: Heap Buffer Over-Write in SF3 encoder when writing multi-frame image",
+          "aliases": [
+            "GHSA-44cp-c3ww-9rv5"
+          ],
+          "fixed_versions": [
+            "04a04eaaa22f721f204c4bf4c6b24b08b1afe5c5"
+          ]
+        },
+        {
+          "id": "CVE-2026-53466",
+          "severity": "MEDIUM",
+          "summary": "ImageMagick: Heap Buffer Over-Read in XCF decoder due to integer conversion overflow",
+          "aliases": [
+            "GHSA-pjxj-pchx-4c3m"
+          ],
+          "fixed_versions": [
+            "38ba210c5e5a660013d632a3d33c431e658befcc"
+          ]
+        },
+        {
+          "id": "CVE-2026-53467",
+          "severity": "MEDIUM",
+          "summary": "ImageMagick: Information Disclosure in MNG decoder because allocated memory is left unchanged",
+          "aliases": [
+            "GHSA-8g53-9m3c-69xg"
+          ],
+          "fixed_versions": [
+            "38ba210c5e5a660013d632a3d33c431e658befcc"
+          ]
+        },
+        {
+          "id": "CVE-2026-55510",
+          "severity": "MEDIUM",
+          "summary": "ImageMagick: Use-After-Free in crafted 8BIM when identifying an image",
+          "aliases": [
+            "GHSA-ff5c-8x9r-8qcw"
+          ],
+          "fixed_versions": [
+            "38ba210c5e5a660013d632a3d33c431e658befcc"
+          ]
+        },
+        {
+          "id": "CVE-2026-55577",
+          "severity": "MEDIUM",
+          "summary": "ImageMagick: Heap Buffer Overflow in ImageMagick MVG decoder",
+          "aliases": [
+            "GHSA-wx47-rm3x-jx6p"
+          ],
+          "fixed_versions": [
+            "38ba210c5e5a660013d632a3d33c431e658befcc"
+          ]
+        },
+        {
+          "id": "CVE-2026-55594",
+          "severity": "MEDIUM",
+          "summary": "ImageMagick: Stack Overflow in MVG decoder due to missing depth check.",
+          "aliases": [
+            "GHSA-mx48-2qq3-23hf"
+          ],
+          "fixed_versions": [
+            "38ba210c5e5a660013d632a3d33c431e658befcc"
+          ]
+        },
+        {
+          "id": "CVE-2026-55595",
+          "severity": "MEDIUM",
+          "summary": "ImageMagick: Infinite Loop in connected-components when providing invalid arguments",
+          "aliases": [
+            "GHSA-qhmf-7fc4-8q3h"
+          ],
+          "fixed_versions": [
+            "38ba210c5e5a660013d632a3d33c431e658befcc"
+          ]
+        },
+        {
+          "id": "CVE-2026-55597",
+          "severity": "MEDIUM",
+          "summary": "ImageMagick: Heap Buffer Over-Write in JP2 encoder when due to incorrect handling of arguments",
+          "aliases": [
+            "GHSA-c4v7-w88g-m6c4"
+          ],
+          "fixed_versions": [
+            "38ba210c5e5a660013d632a3d33c431e658befcc"
+          ]
+        },
+        {
+          "id": "CVE-2026-55628",
+          "severity": "MEDIUM",
+          "summary": "ImageMagick: Policy Bypass in concatenate operation due to missing checks",
+          "aliases": [
+            "GHSA-82mp-vp5c-9pf7"
+          ],
+          "fixed_versions": [
+            "38ba210c5e5a660013d632a3d33c431e658befcc"
+          ]
+        },
+        {
+          "id": "CVE-2026-61464",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-26 Heap Buffer Over-Write via X11",
+          "aliases": [
+            "GHSA-76q6-2p6h-xjqr"
+          ],
+          "fixed_versions": [
+            "38ba210c5e5a660013d632a3d33c431e658befcc"
+          ]
+        },
+        {
+          "id": "CVE-2026-61465",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-26 Memory Allocation Policy Bypass",
+          "aliases": [
+            "GHSA-rvhp-75f6-9jqh"
+          ],
+          "fixed_versions": [
+            "38ba210c5e5a660013d632a3d33c431e658befcc"
+          ]
+        },
+        {
+          "id": "CVE-2026-61857",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-26 Heap Use-After-Free via XMP",
+          "aliases": [
+            "GHSA-qh5g-q395-cx4j"
+          ],
+          "fixed_versions": [
+            "38ba210c5e5a660013d632a3d33c431e658befcc"
+          ]
+        },
+        {
+          "id": "CVE-2026-61858",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-26 Policy Bypass via APNG encoder",
+          "aliases": [
+            "GHSA-v3j6-27vc-7pw2"
+          ],
+          "fixed_versions": [
+            "38ba210c5e5a660013d632a3d33c431e658befcc"
+          ]
+        },
+        {
+          "id": "CVE-2026-61859",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-26 Policy Bypass via script operation",
+          "aliases": [
+            "GHSA-vghg-5jrg-2398"
+          ],
+          "fixed_versions": [
+            "38ba210c5e5a660013d632a3d33c431e658befcc"
+          ]
+        },
+        {
+          "id": "CVE-2026-61860",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-26 Use-After-Free via freetype",
+          "aliases": [
+            "GHSA-6jwg-7q3p-5fqm"
+          ],
+          "fixed_versions": [
+            "38ba210c5e5a660013d632a3d33c431e658befcc"
+          ]
+        },
+        {
+          "id": "CVE-2026-61861",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-26 Use-After-Free in FormatMagickCaption",
+          "aliases": [
+            "GHSA-qvxh-prvr-85w2"
+          ],
+          "fixed_versions": [
+            "38ba210c5e5a660013d632a3d33c431e658befcc"
+          ]
+        },
+        {
+          "id": "CVE-2026-61862",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-26 Information Disclosure via identify",
+          "aliases": [
+            "GHSA-hwf3-r46v-5ggx"
+          ],
+          "fixed_versions": [
+            "38ba210c5e5a660013d632a3d33c431e658befcc"
+          ]
+        },
+        {
+          "id": "CVE-2026-61863",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-26 Memory Leak in TIFF Encoder",
+          "aliases": [
+            "GHSA-6vxp-gfwf-hcr9"
+          ],
+          "fixed_versions": [
+            "38ba210c5e5a660013d632a3d33c431e658befcc"
+          ]
+        },
+        {
+          "id": "CVE-2026-61864",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-26 Memory Leak in Log Colorspace",
+          "aliases": [
+            "GHSA-7c7m-fpjw-gwcq"
+          ],
+          "fixed_versions": [
+            "38ba210c5e5a660013d632a3d33c431e658befcc"
+          ]
+        },
+        {
+          "id": "CVE-2026-61865",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-26 Memory Leak in Hough Lines",
+          "aliases": [
+            "GHSA-j8rh-v2r8-v94x"
+          ],
+          "fixed_versions": [
+            "38ba210c5e5a660013d632a3d33c431e658befcc"
+          ]
+        },
+        {
+          "id": "CVE-2026-61866",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-26 Memory Leak in JNG encoder",
+          "aliases": [
+            "GHSA-99w9-hv66-rfv7"
+          ],
+          "fixed_versions": [
+            "38ba210c5e5a660013d632a3d33c431e658befcc"
+          ]
+        },
+        {
+          "id": "CVE-2026-61867",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-26 Memory Leak in TIFF Encoder",
+          "aliases": [
+            "GHSA-jfq9-q63x-rc63"
+          ],
+          "fixed_versions": [
+            "38ba210c5e5a660013d632a3d33c431e658befcc"
+          ]
+        },
+        {
+          "id": "CVE-2026-61868",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-26 Memory Leak in YUV Decoder",
+          "aliases": [
+            "GHSA-h7f2-f9cc-h2gv"
+          ],
+          "fixed_versions": [
+            "38ba210c5e5a660013d632a3d33c431e658befcc"
+          ]
+        },
+        {
+          "id": "CVE-2026-61869",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-26 Memory Leak in MIFF Encoder",
+          "aliases": [
+            "GHSA-r628-69v2-2f9c"
+          ],
+          "fixed_versions": [
+            "38ba210c5e5a660013d632a3d33c431e658befcc"
+          ]
+        },
+        {
+          "id": "CVE-2026-61870",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-26 Memory Leak via VIFF Encoder",
+          "aliases": [
+            "GHSA-m596-67p7-69wh"
+          ],
+          "fixed_versions": [
+            "38ba210c5e5a660013d632a3d33c431e658befcc"
+          ]
+        },
+        {
+          "id": "CVE-2026-61871",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-26 Memory Leak in ICON decoder",
+          "aliases": [
+            "GHSA-h58x-r7f7-rh84"
+          ],
+          "fixed_versions": [
+            "38ba210c5e5a660013d632a3d33c431e658befcc"
+          ]
+        },
+        {
+          "id": "CVE-2026-61872",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-26 Memory Leak via TIFF Encoder",
+          "aliases": [
+            "GHSA-h5r4-w88w-7ccr"
+          ],
+          "fixed_versions": [
+            "38ba210c5e5a660013d632a3d33c431e658befcc"
+          ]
+        },
+        {
+          "id": "CVE-2026-62343",
+          "severity": "MEDIUM",
+          "summary": "ImageMagick: Heap Buffer Over-Write in morphology operation when an invalid kernel is provided",
+          "aliases": [
+            "GHSA-f5m7-cqgw-8hm7"
+          ],
+          "fixed_versions": [
+            "38ba210c5e5a660013d632a3d33c431e658befcc"
+          ]
+        },
+        {
+          "id": "CVE-2026-62363",
+          "severity": "MEDIUM",
+          "summary": "ImageMagick: Heap Buffer Over-Write in fx operation",
+          "aliases": [
+            "GHSA-422r-8c97-xcg4"
+          ],
+          "fixed_versions": [
+            "b661ac969aa3a0d326690f95830aab246569f090"
+          ]
+        },
+        {
+          "id": "CVE-2026-62946",
+          "severity": "MEDIUM",
+          "summary": "ImageMagick: Integer Overflow in JNX decoder causes heap buffer over-write when processing extremly large files on 32-bit builds",
+          "aliases": [
+            "GHSA-h22j-f9xw-xjjm"
+          ],
+          "fixed_versions": [
+            "b661ac969aa3a0d326690f95830aab246569f090"
+          ]
+        },
+        {
+          "id": "CVE-2026-64685",
+          "severity": "MEDIUM",
+          "summary": "ImageMagick: Heap Buffer Over-Read in BGR decoder due to mising end-of-file check",
+          "aliases": [
+            "GHSA-7rgw-xg25-prjm"
+          ],
+          "fixed_versions": [
+            "b661ac969aa3a0d326690f95830aab246569f090"
+          ]
+        },
+        {
+          "id": "CVE-2026-66011",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-27 Memory Leak via Invalid CLI Options",
+          "aliases": [
+            "GHSA-cvhv-g4rq-3hmw"
+          ],
+          "fixed_versions": [
+            "b661ac969aa3a0d326690f95830aab246569f090"
+          ]
+        },
+        {
+          "id": "CVE-2026-86420",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-30 Denial of Service Memory Budget",
+          "aliases": [
+            "GHSA-4mwf-mggw-29vp"
+          ],
+          "fixed_versions": [
+            "344e9056f43764bfdf82456faf3bc2feee98a6fe"
+          ]
+        },
+        {
+          "id": "CVE-2026-86421",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-30 Memory Leak via MSL decoder",
+          "aliases": [
+            "GHSA-4jv7-q6xw-6f4x"
+          ],
+          "fixed_versions": [
+            "344e9056f43764bfdf82456faf3bc2feee98a6fe"
+          ]
+        },
+        {
+          "id": "CVE-2026-86422",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-30 Path Policy TOCTOU Symlink Race",
+          "aliases": [
+            "GHSA-x8g2-7r3w-h44p"
+          ],
+          "fixed_versions": [
+            "344e9056f43764bfdf82456faf3bc2feee98a6fe"
+          ]
+        },
+        {
+          "id": "CVE-2026-86423",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-30 Heap-use-after-free via GetList",
+          "aliases": [
+            "GHSA-5m9j-96ff-j6qc"
+          ],
+          "fixed_versions": [
+            "344e9056f43764bfdf82456faf3bc2feee98a6fe"
+          ]
+        },
+        {
+          "id": "CVE-2026-86424",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-30 Path Traversal via TOCTOU Symlink Race",
+          "aliases": [
+            "GHSA-9x6f-98x9-rx6g"
+          ],
+          "fixed_versions": [
+            "344e9056f43764bfdf82456faf3bc2feee98a6fe"
+          ]
+        },
+        {
+          "id": "CVE-2026-86425",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-30 Heap-use-after-free via Layer",
+          "aliases": [
+            "GHSA-chf5-8rv9-gjqr"
+          ],
+          "fixed_versions": [
+            "344e9056f43764bfdf82456faf3bc2feee98a6fe"
+          ]
+        },
+        {
+          "id": "CVE-2026-93586",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-31 Use After Free via ImagesToBlob",
+          "aliases": [
+            "GHSA-3rjr-534c-8v67"
+          ],
+          "fixed_versions": [
+            "fb965f1b54a65ddb633f8c2eac4452c782c66d7f"
+          ]
+        },
+        {
+          "id": "CVE-2026-93587",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-31 Policy Bypass via PCD decoder",
+          "aliases": [
+            "GHSA-89wq-f8f6-2j2v"
+          ],
+          "fixed_versions": [
+            "fb965f1b54a65ddb633f8c2eac4452c782c66d7f"
+          ]
+        },
+        {
+          "id": "CVE-2026-93588",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-31 Null Pointer Dereference via PNM",
+          "aliases": [
+            "GHSA-92rw-c5mw-27v4"
+          ],
+          "fixed_versions": [
+            "fb965f1b54a65ddb633f8c2eac4452c782c66d7f"
+          ]
+        },
+        {
+          "id": "CVE-2026-93589",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-31 Division by Zero in FLIF encoder",
+          "aliases": [
+            "GHSA-4gg2-hfgh-6f5c"
+          ],
+          "fixed_versions": [
+            "fb965f1b54a65ddb633f8c2eac4452c782c66d7f"
+          ]
+        },
+        {
+          "id": "CVE-2026-93590",
+          "severity": "UNKNOWN",
+          "summary": "ImageMagick before 7.1.2-31 Policy Bypass in UHDR encoder",
+          "aliases": [
+            "GHSA-7hjx-392p-f8cm"
+          ],
+          "fixed_versions": [
+            "fb965f1b54a65ddb633f8c2eac4452c782c66d7f"
+          ]
+        }
+      ],
+      "patched": []
+    },
+    {
+      "formula": "ruby",
+      "version": "4.0.2",
+      "tag": "4.0.2",
+      "repo_url": "https://github.com/ruby/ruby",
+      "vulnerabilities": [
+        {
+          "id": "CVE-2026-46727",
+          "severity": "HIGH",
+          "summary": null,
+          "aliases": [
+            "BIT-ruby-2026-46727",
+            "BIT-ruby-min-2026-46727"
+          ],
+          "fixed_versions": [
+            "64336ffd0ee9e1f4c05891695a3d7b49cb709721"
+          ]
+        }
+      ],
+      "patched": []
+    },
+    {
+      "formula": "jpeg-turbo",
+      "version": "3.1.4.1",
+      "tag": "3.1.4.1",
+      "repo_url": "https://github.com/libjpeg-turbo/libjpeg-turbo",
+      "vulnerabilities": [
+        {
+          "id": "OSV-2026-1068",
+          "severity": "MEDIUM",
+          "summary": "UNKNOWN READ in jpeg_abort",
+          "aliases": [],
+          "fixed_versions": [
+            "76b7feab363d547e06151c8a8aa0ca72ade0594a"
+          ]
+        }
+      ],
+      "patched": []
+    }
+  ],
+  "skipped_formulae": [
+    "libtiff",
+    "libtool",
+    "xorgproto",
+    "libxau",
+    "little-cms2",
+    "pixman",
+    "libxdmcp",
+    "freetype",
+    "libunistring",
+    "gdk-pixbuf",
+    "glib",
+    "libxcb",
+    "libarchive",
+    "giflib",
+    "libxrender",
+    "ca-certificates",
+    "gettext",
+    "libxext",
+    "libthai",
+    "m4",
+    "libidn",
+    "libx11",
+    "lzo"
+  ],
+  "checked": 36,
+  "complete": false,
+  "outdated_without_sbom": [],
+  "unscanned_formulae": {
+    "oh-my-posh": "untrusted_tap"
+  }
+}
